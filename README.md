@@ -1,7 +1,7 @@
-# cloud-infra
-
-■ 各サーバの役割
-Server1 ・・・　KVMサーバ
-Server2 ・・・　リモート接続用サーバ
-Server3 ・・・　未定
-Server4 ・・・　未定
+# cloud-infra <br>
+<br>
+■ 各サーバの役割 <br>
+Server1 ・・・　KVMサーバ <br>
+Server2 ・・・　リモート接続用サーバ <br>
+Server3 ・・・　未定 <br>
+Server4 ・・・　未定 <br>

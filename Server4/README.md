@@ -1,4 +1,4 @@
-# Server4 (役割未定) <br>
+# Server4 (KVMサーバ) <br>
 <br>
 設定ファイルは/confに <br>
 ソースコードは/srcに <br>

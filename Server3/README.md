@@ -1,4 +1,4 @@
-# Server3 (役割未定) <br>
+# Server3 (KVMサーバ) <br>
 <br>
 設定ファイルは/confに <br>
 ソースコードは/srcに <br>

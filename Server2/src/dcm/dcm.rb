@@ -1,5 +1,5 @@
 # WebAPIからのキューメッセージを受け取り、要求種別ごとに対応を行い、KVMへ要求を出すプログラム　By Kuroki
-# 引数を指定するとRabbitMQサーバを変更できる
+# 引数を指定するとRabbitMQサーバを変更できる。が、requireしているDatabaseMediaterは別途設定変更が必要() 
 # Ver 1.0
 
 

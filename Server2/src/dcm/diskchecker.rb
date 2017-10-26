@@ -9,12 +9,6 @@
 #require './dcm.rb'
 
 def diskcheck
-#max3(x, y, z)
-#    max = x
-#    max = y  if (y > max)
-#    max = z  if (z > max)
-#    return max
-#end
 
   serve1 = `sshpass -p jiro ssh taro@192.168.0.101 df | grep /$ | awk '{ print \$4 }'`
   serve3 = `sshpass -p jiro ssh taro@192.168.0.103 df | grep /$ | awk '{ print \$4 }'`

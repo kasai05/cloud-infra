@@ -29,11 +29,11 @@ def diskcheck
   result = max
 
    if result == serve1 then
-     puts "Server1"
+     return "Server1"
    elsif result == serve3 then
-     puts "Server3"
+     return "Server3"
    else  result == serve4
-     puts "Server4"
+     return "Server4"
    end
 
 end

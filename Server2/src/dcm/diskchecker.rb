@@ -41,4 +41,4 @@ end
   #puts serve1,serve3,serve4  
   #puts result
   #
-diskcheck
+  #diskcheck

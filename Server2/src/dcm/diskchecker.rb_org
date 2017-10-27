@@ -14,22 +14,23 @@ def diskcheck
   serve3 = `sshpass -p jiro ssh taro@192.168.0.103 df | grep /$ | awk '{ print \$4 }'`
   serve4 = `sshpass -p jiro ssh taro@192.168.0.104 df | grep /$ | awk '{ print \$4 }'`
  
-  x = "serve1".to_i
-  y = "serve3".to_i
-  z = "serve4".to_i
+  x = serve1.to_i
+  y = serve3.to_i
+  z = serve4.to_i
   max = x
   max = y  if (y > max)
   max = z  if (z > max)
   result = max
 
-   if result == serve1 then
-     kvm_1 = {:Server1 => result}
+   if result == x then
+     #kvm_1 = Hash.new()
+     kvm_1 = {:hostname => "Server1" , :disk => x}
      return kvm_1
-   elsif result == serve3 then
-     kvm_3 = {:Server3 => result}
+   elsif result == y then
+     kvm_3 = {:hostname => "Server3" ,:disk => y}
      return kvm_3
-   else  result == serve4
-     kvm_4 = {:Server4 => result}
+   else  result == z
+     kvm_4 = {:hostname => "Server4" ,:disk => z}
      return kvm_4
    end
 
@@ -41,4 +42,3 @@ def diskcheck
   #diskcheck
 end
 
-diskcheck

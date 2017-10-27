@@ -9,12 +9,6 @@
 #require './dcm.rb'
 
 def diskcheck
-#max3(x, y, z)
-#    max = x
-#    max = y  if (y > max)
-#    max = z  if (z > max)
-#    return max
-#end
 
   serve1 = `sshpass -p jiro ssh taro@192.168.0.101 df | grep /$ | awk '{ print \$4 }'`
   serve3 = `sshpass -p jiro ssh taro@192.168.0.103 df | grep /$ | awk '{ print \$4 }'`
@@ -29,16 +23,22 @@ def diskcheck
   result = max
 
    if result == serve1 then
-     puts "Server1"
+     kvm_1 = {:Server1 => result}
+     return kvm_1
    elsif result == serve3 then
-     puts "Server3"
+     kvm_3 = {:Server3 => result}
+     return kvm_3
    else  result == serve4
-     puts "Server4"
+     kvm_4 = {:Server4 => result}
+     return kvm_4
    end
 
-end
+#end
 #debug用
   #puts serve1,serve3,serve4  
   #puts result
-  #
+  #puts kvm_1,kvm_3,kvm_4
+  #diskcheck
+end
+
 diskcheck

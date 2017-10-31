@@ -39,7 +39,7 @@ begin
 			result = "NotYetImplemented"
 		end
 
-		queueSender.hostname = '192.168.57.10'
+		queueSender.hostname = '192.168.0.102'
 		queueSender.queueName = 'response'
 		
 		hash.store("queueName", "response")

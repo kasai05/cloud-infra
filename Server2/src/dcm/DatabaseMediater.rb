@@ -6,11 +6,9 @@ require "mysql"
 class DatabaseMediater
 	attr_accessor :userID, :kvmID, :hostName, :cpu, :memory, :disk, :scaleUp, :minCPU, :minMemory, :minDisk, :maxCPU, :maxMemory, :maxDisk, :scaleOutID, :status, :publicKey
 
-	#HOSTNAME = "127.0.0.1"
-	HOSTNAME = "192.168.57.2"
+	HOSTNAME = "127.0.0.1"
 	USERNAME = "root"
-	#PASSWORD = "group1"
-	PASSWORD = "vadmin"
+	PASSWORD = "group1"
 	DBNAME = "IkuraCloud"
 
 	def initialize 

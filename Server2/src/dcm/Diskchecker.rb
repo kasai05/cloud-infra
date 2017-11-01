@@ -10,9 +10,9 @@
 
 def diskcheck(diskmin)
 
-  serve1 = `sshpass -p jiro ssh taro@192.168.0.101 df | grep /$ | awk '{ print \$4 }'`
-  serve3 = `sshpass -p jiro ssh taro@192.168.0.103 df | grep /$ | awk '{ print \$4 }'`
-  serve4 = `sshpass -p jiro ssh taro@192.168.0.104 df | grep /$ | awk '{ print \$4 }'`
+  serve1 = `sshpass -p jiro ssh taro@192.168.0.101 df -BG | grep /$ | awk '{ print \$4 }'`
+  serve3 = `sshpass -p jiro ssh taro@192.168.0.103 df -BG | grep /$ | awk '{ print \$4 }'`
+  serve4 = `sshpass -p jiro ssh taro@192.168.0.104 df -BG | grep /$ | awk '{ print \$4 }'`
  
   x = serve1.to_i
   y = serve3.to_i
@@ -22,7 +22,7 @@ def diskcheck(diskmin)
   max = z  if (z > max)
   result = max
 
-  if (diskmin + 5000000) < result 
+  if (diskmin + 5 ) < result 
      if result == x then
          kvm_1 = {:hostname => "Server1" , :disk => x}
          return kvm_1
@@ -34,7 +34,8 @@ def diskcheck(diskmin)
          return kvm_4
      end
   else
-    return "diskerror" 
+    kvm_res  = {:hostname => "ERROR" ,:disk => "ERROR"}
+    return kvm_res 
   end
 #debug用
   #puts serve1,serve3,serve4  

@@ -1,7 +1,7 @@
 require "./Diskchecker.rb"
 
-puts diskcheck(500000000)
-kvm = diskcheck(500000000)
+puts diskcheck(400)
+kvm = diskcheck(400)
 Hash.new([])
 puts kvm[:hostname]
 puts kvm[:disk]

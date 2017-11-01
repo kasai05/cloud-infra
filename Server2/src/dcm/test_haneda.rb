@@ -1,7 +1,7 @@
-require "./diskchecker.rb"
+require "./Diskchecker.rb"
 
-puts diskcheck
-kvm = diskcheck
+puts diskcheck(400)
+kvm = diskcheck(400)
 Hash.new([])
 puts kvm[:hostname]
 puts kvm[:disk]

@@ -8,7 +8,7 @@
 #
 #require './dcm.rb'
 
-def diskcheck
+def diskcheck(diskmin)
 
   serve1 = `sshpass -p jiro ssh taro@192.168.0.101 df | grep /$ | awk '{ print \$4 }'`
   serve3 = `sshpass -p jiro ssh taro@192.168.0.103 df | grep /$ | awk '{ print \$4 }'`
@@ -22,19 +22,20 @@ def diskcheck
   max = z  if (z > max)
   result = max
 
-   if result == x then
-     #kvm_1 = Hash.new()
-     kvm_1 = {:hostname => "Server1" , :disk => x}
-     return kvm_1
-   elsif result == y then
-     kvm_3 = {:hostname => "Server3" ,:disk => y}
-     return kvm_3
-   else  result == z
-     kvm_4 = {:hostname => "Server4" ,:disk => z}
-     return kvm_4
-   end
-
-#end
+  if (diskmin + 5000000) < result 
+     if result == x then
+         kvm_1 = {:hostname => "Server1" , :disk => x}
+         return kvm_1
+     elsif result == y then
+         kvm_3 = {:hostname => "Server3" ,:disk => y}
+         return kvm_3
+     else  result == z
+         kvm_4 = {:hostname => "Server4" ,:disk => z}
+         return kvm_4
+     end
+  else
+    return "diskerror" 
+  end
 #debug用
   #puts serve1,serve3,serve4  
   #puts result

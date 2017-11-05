@@ -1,98 +1,152 @@
-# WebAPIからのキューメッセージを受け取り、要求種別ごとに対応を行い、KVMへ要求を出すプログラム　By Kuroki
-# Ver 1.1
+# ファイル名：dcm.rb
+# 概要：DataCenterManagerの受付係
+# 役割：主にWebAPIからのキューメッセージの待ち受けを行い、各種動作を実施する。
+# 実行方法：ruby ./agent.rb "MQサーバのIPアドレス" ("待ち受けするキューの名称")
+# バージョン：2.0
+# 作成者：黒木
 
 
-require 'json'
-require 'bunny'
-require './DiskChecker.rb'
-require './DatabaseMediater.rb'
-require './QueueSender.rb'
+require 'json'										# json形式とhash形式を相互に変換するライブラリ
+require 'bunny'										# RabbitMQサーバとの通信で使用するライブラリ
+require './DiskChecker.rb'				# 各KVMサーバの残Diskサイズを調べるメソッド(羽田さん作)
+require './DatabaseMediater.rb'		# MariaDBへ空きIPアドレスの問い合わせと確保を行うモジュール
+require './QueueSender.rb'				# RabbitMQへメッセージキューを送るクラス
 
-QUEUENAME = "WebAPI_to_DCM"
-BASEUUID = "a8feb5a7-a4db-4983-b413-"
-BASEMAC = "08:0"
-ARGV[0].nil? ? HOSTNAME = "127.0.0.1" : HOSTNAME = ARGV[0]
 
-conn = Bunny.new(:hostname => HOSTNAME, :username => "mquser", :password => "mquser")
+# 引数が足りない場合はエラー終了をする
+if ARGV[1].nil? then
+	puts " !*!*!*!*!*!*! ARGUMENT ERROR !*!*!*!*!*!*!"
+	puts " usage: ruby ./#{__FILE__} MQServerAddress DBServerAddress QueueName"
+		puts " QueueName is optional. (default is 'WebAPI_to_DCM')"
+	return -1
+end
+
+# 定数を設定
+MQADDRESS = ARGV[0] # RabbitMQサーバのIPアドレス
+DBADDRESS = ARGV[1] # DatabaseサーバのIPアドレス
+ARGV[2].nil? ? QUEUENAME = "WebAPI_to_DCM" : QUEUENAME = ARGV[1] # 待ち受けするキュー名。デフォルトは「WebAPI_to_DCM」
+BASEUUID = "a8feb5a7-a4db-4983-b413-"  # UUIDはIPアドレスをベースにするが、桁が足りないのでベースを用意する
+
+
+# RabbitMQサーバと接続
+conn = Bunny.new(:hostname => MQADDRESS, :username => "mquser", :password => "mquser")
 conn.start
-
 ch = conn.create_channel
 q = ch.queue(QUEUENAME)
 
 
-begin
-	dm = DatabaseMediater.new()
-	queueSender = QueueSender.new()
+# 関連クラスをインスタンス化
+dm = DatabaseMediater.new(DBADDRESS)  # Database(MariaDB)とのやりとりを担うインスタンス
+queueSender = QueueSender.new()  # キューメッセージの送信を担うインスタンス
 
+begin
 	puts "[*] Waiting for messages. To exit press CTRL+C"
+
+	# キューメッセージの待ち受け開始
 	q.subscribe(:block => true) do |delivery_info, properties, body|
 		puts "*****データを受信*****"
 		puts "[x]Received " + body
-		hash = JSON.parse(body)
+		hash = JSON.parse(body)  # 受信したJSON形式のメッセージをhash形式に変換
+
 		#データタイプにより処理振り分け
 		case hash["type"]
-		when "create"
-			#受信データは、<type><uuid><hostname><cpu><memory><disk><user><maxcpu><maxmemory><maxcount><publickey>
-			#targetKVM = diskcheck(hash["disk"]) #DiskCheckerにより最も容量の空いているKVM名を取得
-			targetKVM = "kvm1"
 
+		when "create"  # データタイプが作成要求の場合...
+
+			# 最もDiskに空きがあるKVMを求める。いずれも容量不足の場合はkvmIDに0をセットする。
+			dc = diskcheck(hash["disk"])  # './DiskChecker.rb のメソッド'
+			targetKVM = dc[:hostname]
+			if targetKVM == "ERROR"
+				hash.store("kvmID", 0)
+			else
+				hash.store("kvmID", targetKVM[-1].to_i)
+			end
+
+			
 			#Databaseより空きアドレスを確保 ("."は含まない、0パディングの12ケタ。ex. 192168000020)
-			dm.userID = hash["user"]
-			dm.kvmID = targetKVM[-1].to_i
-			dm.hostName = hash["hostname"]
-			dm.cpu = hash["cpu"]
-			dm.memory = hash["memory"]
-			dm.disk = hash["disk"]
-			dm.minCPU = hash["mincpu"]
-			dm.minMemory = hash["minmemory"]
-			dm.minDisk = hash["mindisk"]
-			dm.maxCPU = hash["maxcpu"]
-			dm.maxMemory = hash["maxmemory"]
-			dm.maxDisk = hash["maxdisk"]
-			dm.publicKey = hash["publickey"]
-			tempaddr = dm.secureIP() 
+			dm.setParam(hash)
+			dm.status = "creating"
+			#tempaddr = dm.secureIP() 
+			id_ip = dm.secureIP() 
 
-			if tempaddr.nil?  #空きIPアドレスがなかった場合の処理
+			id = id_ip[:vacantID].to_s  
+			ipaddr0padding = id_ip[:vacantIPaddr].to_s
 
-				queueSender.hostname = '192.168.57.10'
+			puts "ID is " + id
+			puts "IPaddr is " + ipaddr0padding
+
+			# IPアドレスの確保に失敗した(=空IPアドレスがない)場合はerrorを返す
+			if ipaddr0padding == ""
+				queueSender.mqAddress = MQADDRESS
 				queueSender.queueName = 'response'
-
-				hash.store("queueName", "response")
+				hash["queueName"] = "response"
+				hash.store("id", id)
 				hash.store("status", "error_create")
 				message = hash.to_json
 				queueSender.msg = message
 				queueSender.send()
 				next
+			else
+				#先ほど取得したアドレスからIPアドレスを決める
+				ipaddr = ipaddr0padding[0..2] + "." + ipaddr0padding[3..5] + "." + ipaddr0padding[6..8] + "." + ipaddr0padding[9..11]
+
+				#予め用意した文字列と先ほど取得したアドレスを組み合わせ、MACアドレスを決める
+				macaddr = "00:" + ipaddr0padding[2..3] + ":" + ipaddr0padding[4..5] + ":" + ipaddr0padding[6..7] + ":" + ipaddr0padding[8..9] + ":" + ipaddr0padding[10..11]
+
+				#予め用意した文字列と先ほど取得したアドレスを組み合わせて、UUIDを決める
+				uuid = BASEUUID + ipaddr0padding
 			end
 
-			#先ほど取得したアドレスからIPアドレスを求める
-			ipaddr = tempaddr[0..2] + "." + tempaddr[3..5] + "." + tempaddr[6..8] + "." + tempaddr[9..11]
+			# KVMのAgentに送る要求内容を整える
+			#hash.store("queueName", "#{targetKVM}") 
+			hash["queueName"] = "#{targetKVM}"
+			hash.store("uuid", "#{uuid}")
+			hash.store("ipaddr", "#{ipaddr}")
+			hash.store("macaddr", "#{macaddr}")
+			hash.store("status", "creating")
 
-			#予め用意した文字列と先ほど取得したアドレスを組み合わせ、MACアドレスを求める
-			macaddr = tempaddr[0..1] + ":" + tempaddr[2..3] + ":" + tempaddr[4..5] + ":" + tempaddr[6..7] + ":" + tempaddr[8..9] + ":" + tempaddr[10..11]
 
-			#予め用意した文字列と先ほど取得したアドレスを組み合わせて、UUIDを求める
-			uuid = BASEUUID + tempaddr
+			queueSender.mqAddress = MQADDRESS 
 
-			# 受領した要求をKVMに転送する
-			queueSender.hostname = HOSTNAME #RabbitMQのIPアドレス
-			queueSender.queueName = targetKVM #キューの名前はVMを作成するKVM名
-			hash.store("queueName", "#{targetKVM}")
+			# いずれのKVMも容量不足だった場合についてはキューの名前を変更し、Agentではなくresult.rbでエラーを受け取るよう変更する
+			if targetKVM == "ERROR"
+				queueSender.queueName = "response"
+				hash["queueName"] = "response"
+				hash.store("id", id)
+				hash.store("status", "error_create(size)")
+			else
+				queueSender.queueName = targetKVM  # キューの名前はVMを作成するKVM名
+			end
+
+			# hash形式のメッセージをjson形式に変換する
 			message = hash.to_json
+
+			# メッセージキュー送信用クラスに送信するメッセージを登録
 			queueSender.msg = message
-			#queueSender.msg = %Q[{"queueName":"#{targetKVM}", "type":"#{hash["type"]}", "uuid":"#{uuid}", "ipaddr":"#{ipaddr}", "macaddr":"#{macaddr}", "cpu":"#{hash["cpu"]}", "memory":"#{hash["memory"]}", "publickey":"#{hash["publickey"]}"}]
+
+			# メッセージキュー送信用クラスでメッセージを送信
 			queueSender.send()
 
 
-		when "start", "stop", "destroy", "delete"
-			#受信データは、<type><uuid> (他にも受信するかもしれないが使わない。)
-			#			targetKVM = dm.getKVM(hash[uuid])
-			targetKVM = "kvm1"
+		when "start", "stop", "destroy", "delete"  # データタイプが作成、停止、強制停止、削除の場合...
 
-			queueSender.hostname = HOSTNAME #RabbitMQのIPアドレス
-			queueSender.queueName = targetKVM
-			queueSender.msg = %Q[{"queueName":"#{targetKVM}", "type":"#{hash["type"]}", "uuid":"#{hash["uuid"]}"}]
-			queueSender.send()
+			# UUIDから対象の仮想マシンが格納されているKVMIDを確認する
+			targetKVM = "Server" + dm.getKVMID(hash["uuid"]).to_s
+
+			# KVMIDが0の場合かつデータタイプが「delete」の場合はデータベースから削除する
+			if targetKVM == 0 and hash["type"] == "delete"
+				dm.delete(hash["uuid"])
+				next
+			elsif targetKVM == 0
+				# データタイプがそれ以外の場合は反応しない
+				next
+			else
+				# KVMIDが0でなかった場合はKVMにメッセージを転送する
+				queueSender.mqAddress = MQADDRESS #RabbitMQのIPアドレス
+				queueSender.queueName = targetKVM
+				queueSender.msg = %Q[{"queueName":"#{targetKVM}", "type":"#{hash["type"]}", "uuid":"#{hash["uuid"]}"}]
+				queueSender.send()
+			end
 		else
 			puts "ERROR: Not yet implemented (" + hash["type"] + ")"
 		end
@@ -102,3 +156,4 @@ rescue Interrupt => _
 	conn.close
 	exit(0)
 end
+

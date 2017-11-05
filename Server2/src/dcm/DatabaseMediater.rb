@@ -1,51 +1,87 @@
-# Database接続用クラス　by Kuroki
-# ver 1.0
+# ファイル名：DatabaseMediater.rb
+# 概要：Databaseアクセスクラス
+# 役割：Databaseとの通信を行い、IPアドレスの確保、情報の書き込み、参照を行う
+# 実行方法：メインプログラムからインスタンス化してインスタンスメソッドを呼び出す
+# バージョン：2.0
+# 作成者：黒木
 
-require "mysql"
+require "mysql"   # ruby-mysqlを読み込む。(別途gem installしておく必要がある)
 
 class DatabaseMediater
 	attr_accessor :userID, :kvmID, :hostName, :cpu, :memory, :disk, :scaleUp, :minCPU, :minMemory, :minDisk, :maxCPU, :maxMemory, :maxDisk, :scaleOutID, :status, :publicKey
 
-	HOSTNAME = "127.0.0.1"
 	USERNAME = "root"
 	PASSWORD = "group1"
 	DBNAME = "IkuraCloud"
 
-	def initialize 
-		@userID = 1
-		@kvmID = 1
-		@hostName = "test"
-		@cpu = 1
-		@memory = 512
-		@disk = 25
-		@scaleUp = 0
-		@minCPU = 1
-		@minMemory = 512
-		@minDisk = 25
-		@maxCPU = 1
-		@maxMemory = 512
-		@maxDisk = 25
-		@scaleOutID = 0
-		@status = "creating"
-		@publicKey = "testkey"
+
+	# インスタンス化した時の初期化
+	def initialize(ipAddress)
+		@mqAddress = ipAddress
+	end
+
+	# hash形式の情報を変数に格納する
+	def setParam(hash)
+		hash["user"].nil? ? @userID = "noUserID" : @userID = hash["user"]
+		hash["kvmID"].nil? ? @kvmID = "0" : @kvmID = hash["kvmID"]
+		hash["cpu"].nil? ? @cpu = 1 : @cpu = hash["cpu"]
+		hash["memory"].nil? ? @memory = 512 : @memory = hash["memory"]
+		hash["disk"].nil? ? @disk = 20 : @disk = hash["disk"]
+		hash["publickey"].nil? ? @publickey + "abcdefg" : @publicKey = hash["publickey"]
+		hash["hostName"].nil? ? @hostName = "noName" : @hostName = hash["hostName"]
+		hash["scaleUp"].nil? ? @scaleUp = 0 : @scaleUp = hash["scaleUp"]
+		hash["minCPU"].nil? ? @minCPU = @cpu : @minCPU = hash["minCPU"]
+		hash["minMemory"].nil? ? @minMemory = @memory : @minMemory = hash["minMemory"]
+		hash["minDisk"].nil? ? @minDisk = @disk : @minDisk = hash["minDisk"]
+		hash["maxCPU"].nil? ? @maxCPU = @cpu : @maxCPU = hash["maxCPU"]
+		hash["maxMemory"].nil? ? @maxMemory = @memory : @maxMemory = hash["maxMemory"]
+		hash["maxDisk"].nil? ? @maxDisk = @disk : @maxDisk = hash["maxDisk"]
+		hash["scaleOutID"].nil? ? @scaleOutID = 0 : @scaleOutID = hash["scaleOutID"]
 	end
 
 
+	# データベースから空IPアドレスを取得する (条件：userID = 0)
+	# この際重複が発生しないように、取得したIPアドレスのレコードにそのままデータを書き込む
 	def secureIP
 		vacantID = nil
 		vacantIPaddr = nil
-		client = Mysql.connect(HOSTNAME, USERNAME, PASSWORD, DBNAME)
+		client = Mysql.connect(@mqAddress, USERNAME, PASSWORD, DBNAME)
 		client.query("SELECT id, IPaddr FROM VirtualMachine WHERE UserID = 0 LIMIT 1").each do |col1, col2| 
 			vacantID = col1
 			vacantIPaddr = col2
 		end
 
-		stmt = client.prepare("UPDATE VirtualMachine SET UserID = ?,
-													KVMID = ?, HostName = ?, CPU = ?, Memory = ?,
-													Disk = ?, ScaleUp = ?, MinCPU = ?, MinMemory = ?, MinDisk = ?,
-													MaxCPU = ?, MaxMemory = ?, MaxDisk = ?, ScaleOutID = ?, 
-													Status = ?, PublicKey = ? WHERE id = ?")
-		stmt.execute "#{@userID}", "#{@kvmID}", "#{@hostName}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}", "#{vacantID}"
-		return vacantIPaddr
+		if vacantID.nil?
+			stmt = client.prepare("INSERT INTO VirtualMachine (UserID, KVMID, HostName, CPU, Memory, Disk, ScaleUp, MinCPU, MinMemory, MinDisk, MaxCPU, MaxMemory, MaxDisk, ScaleOutID, Status, PublicKey) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+			p stmt.execute("#{@userID}", 0, "#{@hostName}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}")
+		else
+			stmt = client.prepare("UPDATE VirtualMachine SET UserID = ?,
+														KVMID = ?, HostName = ?, CPU = ?, Memory = ?,
+														Disk = ?, ScaleUp = ?, MinCPU = ?, MinMemory = ?, MinDisk = ?,
+														MaxCPU = ?, MaxMemory = ?, MaxDisk = ?, ScaleOutID = ?, 
+														Status = ?, PublicKey = ? WHERE id = ?")
+			stmt.execute("#{@userID}", "#{@kvmID}", "#{@hostName}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}", "#{vacantID}")
+		end
+
+		ans = {:vacantID => vacantID, :vacantIPaddr => vacantIPaddr}
+		return ans
+	end
+
+	# 指定されたuuidのインスタンスをデータベースから削除する。(userIDを0にする)
+	def delete(uuid)
+		client = Mysql.connect(@mqAddress, USERNAME, PASSWORD, DBNAME)
+		stmt = client.prepare("UPDATE VirtualMachine SET UserID = ? WHERE InstanceUUID = ?")
+		stmt.execute(0,uuid)
+	end
+
+	# 指定されたuuidのインスタンスが格納されているkvmのサーバ番号を返す
+	def getKVMID(uuid)
+		client = Mysql.connect(@mqAddress, USERNAME, PASSWORD, DBNAME)
+		kvmid = nil
+		puts "aa"
+		client.query("SELECT KVMID FROM VirtualMachine WHERE InstanceUUID = #{uuid} LIMIT 1").each do |col1|
+			kvmid = col1[0].to_i  # 0パディングを削除するためにいったんintに変換する
+		end
+		return kvmid.to_s
 	end
 end

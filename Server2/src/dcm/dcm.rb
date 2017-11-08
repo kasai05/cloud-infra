@@ -2,7 +2,7 @@
 # 概要：DataCenterManagerの受付係
 # 役割：主にWebAPIからのキューメッセージの待ち受けを行い、各種動作を実施する。
 # 実行方法：ruby ./agent.rb "MQサーバのIPアドレス" ("待ち受けするキューの名称")
-# バージョン：2.0
+# バージョン：2.1
 # 作成者：黒木
 
 
@@ -53,21 +53,30 @@ begin
 
 		when "create"  # データタイプが作成要求の場合...
 
-			# 最もDiskに空きがあるKVMを求める。いずれも容量不足の場合はkvmIDに0をセットする。
+			# 最もDiskに空きがあるKVMのIDを求める。いずれも容量不足の場合はkvmIDに0にしてエラーをデータベースに記録する。また、以降の処理は行わない。
 			dc = diskcheck(hash["disk"])  # './DiskChecker.rb のメソッド'
 			targetKVM = dc[:hostname]
 			if targetKVM == "ERROR"
 				hash.store("kvmID", 0)
+				dm.setParams(hash)
+				dm.status = "Error:NoDiskSpaceLeft"
+				dm.addRecode()
+				puts "Error:NoDiskSpaceLeft"
+				next
 			else
 				hash.store("kvmID", targetKVM[-1].to_i)
 			end
 
-			
+
 			#Databaseより空きアドレスを確保 ("."は含まない、0パディングの12ケタ。ex. 192168000020)
-			dm.setParam(hash)
+			dm.setParams(hash)
 			dm.status = "creating"
-			#tempaddr = dm.secureIP() 
 			id_ip = dm.secureIP() 
+
+			if id_ip[:vacantIPaddr].nil? # 空きIPアドレスを確保できなかった場合は以降の処理は行わない。
+				puts "Error:NoVacantIPAddress"
+				next
+			end
 
 			id = id_ip[:vacantID].to_s  
 			ipaddr0padding = id_ip[:vacantIPaddr].to_s
@@ -75,30 +84,18 @@ begin
 			puts "ID is " + id
 			puts "IPaddr is " + ipaddr0padding
 
-			# IPアドレスの確保に失敗した(=空IPアドレスがない)場合はerrorを返す
-			if ipaddr0padding == ""
-				queueSender.mqAddress = MQADDRESS
-				queueSender.queueName = 'response'
-				hash["queueName"] = "response"
-				hash.store("id", id)
-				hash.store("status", "error_create")
-				message = hash.to_json
-				queueSender.msg = message
-				queueSender.send()
-				next
-			else
-				#先ほど取得したアドレスからIPアドレスを決める
-				ipaddr = ipaddr0padding[0..2] + "." + ipaddr0padding[3..5] + "." + ipaddr0padding[6..8] + "." + ipaddr0padding[9..11]
 
-				#予め用意した文字列と先ほど取得したアドレスを組み合わせ、MACアドレスを決める
-				macaddr = "00:" + ipaddr0padding[2..3] + ":" + ipaddr0padding[4..5] + ":" + ipaddr0padding[6..7] + ":" + ipaddr0padding[8..9] + ":" + ipaddr0padding[10..11]
+			#先ほど取得したアドレスからIPアドレスを決める
+			ipaddr = ipaddr0padding[0..2] + "." + ipaddr0padding[3..5] + "." + ipaddr0padding[6..8] + "." + ipaddr0padding[9..11]
 
-				#予め用意した文字列と先ほど取得したアドレスを組み合わせて、UUIDを決める
-				uuid = BASEUUID + ipaddr0padding
-			end
+			#予め用意した文字列と先ほど取得したアドレスを組み合わせ、MACアドレスを決める
+			macaddr = "00:" + ipaddr0padding[2..3] + ":" + ipaddr0padding[4..5] + ":" + ipaddr0padding[6..7] + ":" + ipaddr0padding[8..9] + ":" + ipaddr0padding[10..11]
+
+			#予め用意した文字列と先ほど取得したアドレスを組み合わせて、UUIDを決める
+			#uuid = BASEUUID + ipaddr0padding
+			uuid = id_ip[:uuid].to_s
 
 			# KVMのAgentに送る要求内容を整える
-			#hash.store("queueName", "#{targetKVM}") 
 			hash["queueName"] = "#{targetKVM}"
 			hash.store("uuid", "#{uuid}")
 			hash.store("ipaddr", "#{ipaddr}")

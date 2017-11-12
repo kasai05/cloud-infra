@@ -8,7 +8,7 @@
 require "mysql"   # ruby-mysqlを読み込む。(別途gem installしておく必要がある)
 
 class DatabaseMediater
-	attr_accessor :userID, :kvmID, :hostName, :cpu, :memory, :disk, :scaleUp, :minCPU, :minMemory, :minDisk, :maxCPU, :maxMemory, :maxDisk, :scaleOutID, :status, :publicKey
+	attr_accessor :userID, :kvmID, :hostname, :cpu, :memory, :disk, :scaleUp, :minCPU, :minMemory, :minDisk, :maxCPU, :maxMemory, :maxDisk, :scaleOutID, :status, :publicKey
 
 	USERNAME = "root"
 	PASSWORD = "group1"
@@ -36,7 +36,7 @@ class DatabaseMediater
 		hash["memory"].nil? ? @memory = 512 : @memory = hash["memory"]
 		hash["disk"].nil? ? @disk = 20 : @disk = hash["disk"]
 		hash["publickey"].nil? ? @publickey + "abcdefg" : @publicKey = hash["publickey"]
-		hash["hostName"].nil? ? @hostName = "noName" : @hostName = hash["hostName"]
+		hash["hostname"].nil? ? @hostname = "noName" : @hostname = hash["hostname"]
 		hash["scaleUp"].nil? ? @scaleUp = 0 : @scaleUp = hash["scaleUp"]
 		hash["minCPU"].nil? ? @minCPU = @cpu : @minCPU = hash["minCPU"]
 		hash["minMemory"].nil? ? @minMemory = @memory : @minMemory = hash["minMemory"]
@@ -72,7 +72,7 @@ class DatabaseMediater
 			@@instanceCount += 1
 
 			stmt = client.prepare("INSERT INTO VirtualMachine (UserID, KVMID, InstanceUUID, HostName, CPU, Memory, Disk, ScaleUp, MinCPU, MinMemory, MinDisk, MaxCPU, MaxMemory, MaxDisk, ScaleOutID, Status, PublicKey) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
-			stmt.execute("#{@userID}", "#{@kvmID}", "#{@uuid}", "#{@hostName}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}")
+			stmt.execute("#{@userID}", "#{@kvmID}", "#{@uuid}", "#{@hostname}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}")
 
 		else  # 空きIPアドレスがある場合は、そのIPアドレスのレコードを更新する
 
@@ -80,11 +80,11 @@ class DatabaseMediater
 			@uuid = BASEUUID + vacantIPaddr.to_s
 
 			stmt = client.prepare("UPDATE VirtualMachine SET UserID = ?,
-														KVMID = ?, InstanceUUID = ?, HostName = ?, CPU = ?, Memory = ?,
-														Disk = ?, ScaleUp = ?, MinCPU = ?, MinMemory = ?, MinDisk = ?,
-														MaxCPU = ?, MaxMemory = ?, MaxDisk = ?, ScaleOutID = ?, 
-														Status = ?, PublicKey = ? WHERE id = ?")
-			stmt.execute("#{@userID}", "#{@kvmID}", "#{@uuid}", "#{@hostName}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}", "#{vacantID}")
+													KVMID = ?, InstanceUUID = ?, HostName = ?, CPU = ?, Memory = ?,
+													Disk = ?, ScaleUp = ?, MinCPU = ?, MinMemory = ?, MinDisk = ?,
+													MaxCPU = ?, MaxMemory = ?, MaxDisk = ?, ScaleOutID = ?, 
+													Status = ?, PublicKey = ? WHERE id = ?")
+			stmt.execute("#{@userID}", "#{@kvmID}", "#{@uuid}", "#{@hostname}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}", "#{vacantID}")
 		end
 
 		# 呼び出し元に、空きIPアドレスとそのレコードIDを返す
@@ -104,7 +104,7 @@ class DatabaseMediater
 	def getKVMID(uuid)
 		client = Mysql.connect(@mqAddress, USERNAME, PASSWORD, DBNAME)
 		kvmid = nil
-		client.query("SELECT KVMID FROM VirtualMachine WHERE InstanceUUID = #{uuid} LIMIT 1").each do |col1|
+		client.query("SELECT KVMID FROM VirtualMachine WHERE InstanceUUID = \"#{uuid}\" LIMIT 1").each do |col1|
 			kvmid = col1[0].to_i  # 0パディングを削除するためにいったんintに変換する
 		end
 		return kvmid.to_s
@@ -119,6 +119,6 @@ class DatabaseMediater
 
 		client = Mysql.connect(@mqAddress, USERNAME, PASSWORD, DBNAME)
 		stmt = client.prepare("INSERT INTO VirtualMachine (UserID, KVMID, InstanceUUID, HostName, CPU, Memory, Disk, ScaleUp, MinCPU, MinMemory, MinDisk, MaxCPU, MaxMemory, MaxDisk, ScaleOutID, Status, PublicKey) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
-		stmt.execute("#{@userID}", "#{@kvmID}", "#{@uuid}", "#{@hostName}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}")
+		stmt.execute("#{@userID}", "#{@kvmID}", "#{@uuid}", "#{@hostname}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}")
 	end
 end

@@ -1,0 +1,14 @@
+<h2>ログインユーザを選択してください</h2>
+<form action="/createuser" method="get"><input type="submit" value="新規ユーザ登録"></form>
+<br><br>
+
+<h3>ユーザ一覧</h3>
+<%
+@users.each do | user |
+userName = user[:userName]
+userID = user[:userID]
+%>
+<form action="<%=userID%>" method="get"><input type="submit" value="<%=userName%>"></form>
+<%
+end 
+%>

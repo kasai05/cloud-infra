@@ -106,7 +106,7 @@ end
 # インスタンスの停止
 post '/stop/:uuid' do |uuid|
   @uuid = uuid
-  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "start", :uuid => @uuid)
+  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "stop", :uuid => @uuid)
   PUSH_WEBAPI!
 
   GET_LIST!
@@ -118,7 +118,7 @@ end
 # インスタンスの強制停止
 post '/destroy/:uuid' do |uuid|
   @uuid = uuid
-  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "start", :uuid => @uuid)
+  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "destroy", :uuid => @uuid)
   PUSH_WEBAPI!
 
   GET_LIST!
@@ -130,7 +130,7 @@ end
 # インスタンスの削除
 post '/delete/:uuid' do |uuid|
   @uuid = uuid
-  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "start", :uuid => @uuid)
+  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "delete", :uuid => @uuid)
   PUSH_WEBAPI!
 
   GET_LIST!

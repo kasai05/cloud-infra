@@ -29,3 +29,5 @@ when "delete"
 	qs.msg = %Q[{"queueName":"WEBAPI_to_DCM", "type":"delete",  "uuid":"#{target}"}]
 end
 qs.send()
+
+

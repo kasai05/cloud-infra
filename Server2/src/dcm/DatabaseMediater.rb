@@ -80,10 +80,10 @@ class DatabaseMediater
 			@uuid = BASEUUID + vacantIPaddr.to_s
 
 			stmt = client.prepare("UPDATE VirtualMachine SET UserID = ?,
-													KVMID = ?, InstanceUUID = ?, HostName = ?, CPU = ?, Memory = ?,
-													Disk = ?, ScaleUp = ?, MinCPU = ?, MinMemory = ?, MinDisk = ?,
-													MaxCPU = ?, MaxMemory = ?, MaxDisk = ?, ScaleOutID = ?, 
-													Status = ?, PublicKey = ? WHERE id = ?")
+														KVMID = ?, InstanceUUID = ?, HostName = ?, CPU = ?, Memory = ?,
+														Disk = ?, ScaleUp = ?, MinCPU = ?, MinMemory = ?, MinDisk = ?,
+														MaxCPU = ?, MaxMemory = ?, MaxDisk = ?, ScaleOutID = ?, 
+														Status = ?, PublicKey = ? WHERE id = ?")
 			stmt.execute("#{@userID}", "#{@kvmID}", "#{@uuid}", "#{@hostname}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}", "#{vacantID}")
 		end
 

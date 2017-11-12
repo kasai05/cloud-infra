@@ -11,7 +11,7 @@ require 'active_record'
 require 'json'
 require 'grape'
 
-require_relative '../dcm/QueueSender.rb'
+require_relative '../QueueSender.rb'
 
 class MessageAPI < Grape::API
   format :json

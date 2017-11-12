@@ -32,38 +32,37 @@ get '/createuser' do
   erb :createuser
 end
 
-post '/createuser' do
+post '/createuser' do 
   form do
-    filters :strip
+    #filters :strip
     field :username, :present => true
-    field :tel, :present => true
-    field :email, :present => true ,:email => true
+   #field :username, :present => true
   end
   if form.failed?
    	"resister failed"
   else
     	"sucess"
-  @username = params[:username]
-  @tel = params[:tel]
-  @email = params[:email]
-  @userID 
-  userCount = 1
+  	@username = params[:username]
+  	#@username = form[:username]
+  	@tel = params[:tel]
+  	@email = params[:email]
+  	@userID 
+  	userCount = 1
 
-  # UserIDを決めるため、レコード数を確認する
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT UserID FROM User").each do |userid|
-    userCount += 1
-  end
+  	# UserIDを決めるため、レコード数を確認する
+  	client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
+  	client.query("SELECT UserID FROM User").each do |userid|
+   	  userCount += 1
+  	  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
+  	  stmt = client.prepare("INSERT INTO User (UserID, UserName, Tel, Email) VALUES (?,?,?,?)")
+ 	  stmt.execute("#{@userID}", "#{@username}", "#{@tel}", "#{@email}")
 
-  # UserIDの書式を調整
-  @userID = sprintf("%08d",userCount).to_s
-
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  stmt = client.prepare("INSERT INTO User (UserID, UserName, Tel, Email) VALUES (?,?,?,?)")
-  stmt.execute("#{@userID}", "#{@username}", "#{@tel}", "#{@email}")
-
-  @refresh = "true"
-  erb :createuser
+	  @refresh = "true"
+      	  
+ 	  # UserIDの書式を調整
+      	  @userID = sprintf("%08d",userCount).to_s
+        end
+    	erb :createuser
   end
 end
 
@@ -88,15 +87,6 @@ end
 
 # インスタンスの新規作成
 post '/createinstance/:userID' do |userid|
-  form do
-    filters :strip
-    field :hostname, :present => true
-    field :publickey, :present => true
-  end
-  if form.failed?
-   	"resister failed"
-  else
-    	"sucess"
   @userid = userid
   @hostname = params[:hostname]
   @cpu = params[:cpu]
@@ -109,7 +99,6 @@ post '/createinstance/:userID' do |userid|
 
   @refresh = "true"
   erb :createinstance
-  end
 end
 
 

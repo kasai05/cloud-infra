@@ -5,7 +5,6 @@ require './DataBase.rb'
 require './helper.rb'
 require 'net/http'
 require 'json'
-require 'sinatra/formkeeper'
 
 USERNAME = "root"
 PASSWORD = "group1"
@@ -33,16 +32,6 @@ get '/createuser' do
 end
 
 post '/createuser' do
-  form do
-    filters :strip
-    field :username, :present => true
-    field :tel, :present => true
-    field :email, :present => true ,:email => true
-  end
-  if form.failed?
-   	"resister failed"
-  else
-    	"sucess"
   @username = params[:username]
   @tel = params[:tel]
   @email = params[:email]
@@ -64,7 +53,6 @@ post '/createuser' do
 
   @refresh = "true"
   erb :createuser
-  end
 end
 
 
@@ -88,15 +76,6 @@ end
 
 # インスタンスの新規作成
 post '/createinstance/:userID' do |userid|
-  form do
-    filters :strip
-    field :hostname, :present => true
-    field :publickey, :present => true
-  end
-  if form.failed?
-   	"resister failed"
-  else
-    	"sucess"
   @userid = userid
   @hostname = params[:hostname]
   @cpu = params[:cpu]
@@ -109,7 +88,6 @@ post '/createinstance/:userID' do |userid|
 
   @refresh = "true"
   erb :createinstance
-  end
 end
 
 

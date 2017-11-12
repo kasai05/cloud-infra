@@ -1,3 +1,5 @@
+#テスト用のキュー送信プログラム
+
 require "./QueueSender.rb"
 
 puts "ruby test.rb MQADDRESS MODE uuid"

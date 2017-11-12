@@ -1,0 +1,183 @@
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-000000000008"}
+QueueName : Server0
+[x]Sent {"queueName":"Server0", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-000000000008"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-000000000008"}
+QueueName : Server0
+[x]Sent {"queueName":"Server0", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-000000000008"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000207"}
+QueueName : Server4
+[x]Sent {"queueName":"Server4", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000207"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+QueueName : Server4
+[x]Sent {"queueName":"Server4", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"create", "user":"00000002", "hostname":"test04", "cpu":"2", "memory":"1024", "disk":"20", "publickey":"222"}
+385
+385
+406
+{:hostname=>"Server4", :disk=>406}
+ID is 00000006
+IPaddr is 192168000206
+QueueName : Server4
+[x]Sent {"queueName":"Server4","type":"create","user":"00000002","hostname":"test04","cpu":"2","memory":"1024","disk":"20","publickey":"222","kvmID":4,"uuid":"a8feb5a7-a4db-4983-b413-192168000206","ipaddr":"192.168.000.206","macaddr":"00:21:68:00:02:06","status":"creating"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"start", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+QueueName : Server4
+[x]Sent {"queueName":"Server4", "type":"start", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"start", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+QueueName : Server4
+[x]Sent {"queueName":"Server4", "type":"start", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+[*] Waiting for messages. To exit press CTRL+C
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"stop", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+QueueName : Server4
+[x]Sent {"queueName":"Server4", "type":"stop", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+QueueName : Server4
+[x]Sent {"queueName":"Server4", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000206"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-000000000008"}
+QueueName : Server0
+[x]Sent {"queueName":"Server0", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-000000000008"}
+[*] Waiting for messages. To exit press CTRL+C
+[*] Waiting for messages. To exit press CTRL+C
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-000000000008"}
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000204"}
+QueueName : Server3
+[x]Sent {"queueName":"Server3", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000204"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000203"}
+QueueName : Server1
+[x]Sent {"queueName":"Server1", "type":"delete", "uuid":"a8feb5a7-a4db-4983-b413-192168000203"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"create", "user":"00000002", "hostname":"myVM", "cpu":"1", "memory":"512", "disk":"15", "publickey":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDjkXqyNT8b4czKKafgFnUQVEd1O8PUY8bkEE9daQpkUfs/7HtEB+52D3kz34taIM313TwItqnsIhzQQWNNb5ASz64b2k93hV4kUb8WHmtnZWUnLpTKbhPlEfrhtoyJC51Gg/87r5qXnU3kYtxVxmiZCGGclQC5k/+L+nfg7L5H2sVbKpUIrYxaom1oR4BsMHhzrCbTmXH8TF4frcIpmD9N2W44Pp3aqkfh+I4G8tCVsVZkM4HVQGr+VgrVSc5jGeZKyQbbMN0iNdQ6llto/A5PZ2uCYcMOvGLIbvAM+ISM2WOc5rpkGtij0IgqSXx4HD/DYixrYsHJ4Hvd6Uwfs4kP kuroki@Server2"}
+405
+405
+406
+{:hostname=>"Server4", :disk=>406}
+ID is 00000003
+IPaddr is 192168000203
+QueueName : Server4
+[x]Sent {"queueName":"Server4","type":"create","user":"00000002","hostname":"myVM","cpu":"1","memory":"512","disk":"15","publickey":"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDjkXqyNT8b4czKKafgFnUQVEd1O8PUY8bkEE9daQpkUfs/7HtEB+52D3kz34taIM313TwItqnsIhzQQWNNb5ASz64b2k93hV4kUb8WHmtnZWUnLpTKbhPlEfrhtoyJC51Gg/87r5qXnU3kYtxVxmiZCGGclQC5k/+L+nfg7L5H2sVbKpUIrYxaom1oR4BsMHhzrCbTmXH8TF4frcIpmD9N2W44Pp3aqkfh+I4G8tCVsVZkM4HVQGr+VgrVSc5jGeZKyQbbMN0iNdQ6llto/A5PZ2uCYcMOvGLIbvAM+ISM2WOc5rpkGtij0IgqSXx4HD/DYixrYsHJ4Hvd6Uwfs4kP kuroki@Server2","kvmID":4,"uuid":"a8feb5a7-a4db-4983-b413-192168000203","ipaddr":"192.168.000.203","macaddr":"00:21:68:00:02:03","status":"creating"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"start", "uuid":"a8feb5a7-a4db-4983-b413-192168000203"}
+QueueName : Server4
+[x]Sent {"queueName":"Server4", "type":"start", "uuid":"a8feb5a7-a4db-4983-b413-192168000203"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"start", "uuid":"a8feb5a7-a4db-4983-b413-192168000203"}
+QueueName : Server4
+[x]Sent {"queueName":"Server4", "type":"start", "uuid":"a8feb5a7-a4db-4983-b413-192168000203"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":test_name, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T15:54:14.136020 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":test_name, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":test_name, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T15:56:36.342684 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":test_name, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T16:26:10.457555 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T16:26:27.209756 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T16:27:03.529644 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T16:27:54.775948 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T16:29:16.338300 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":api_test, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":WebAPI_to_DCM, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T16:30:09.182572 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":WebAPI_to_DCM, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":WebAPI_to_DCM, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T16:30:45.610184 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":WebAPI_to_DCM, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":WebAPI_to_DCM, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T16:37:23.928434 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":WebAPI_to_DCM, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":WebAPI_to_DCM, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}
+E, [2017-11-12T16:44:27.148785 #5820] ERROR -- #<Bunny::Session:0x55575f7cc660 mquser@127.0.0.1:5672, vhost=/, addresses=[127.0.0.1:5672]>: Uncaught exception from consumer #<Bunny::Consumer:46916871481840 @channel_id=1 @queue=WebAPI_to_DCM> @consumer_tag=bunny-1510421804000-240992719770>: #<JSON::ParserError: 765: unexpected token at '{"queueName":WebAPI_to_DCM, "type":create, "user":"user01", "hostname":"test_host", "cpu":"8", "memory":"8", "disk":"256", "publickey":"abcdefghj"}'> @ /usr/local/lib/ruby/gems/2.4.0/gems/json-2.1.0/lib/json/common.rb:156:in `parse'
+***** Received a Message *****
+[x]Received {"queueName":"tete", "type":"create", "user":"0000", "hostname":"testhost", "cpu":"1", "memory":"512", "disk":"15", "publickey":"abcdefg"}
+405
+405
+386
+{:hostname=>"Server1", :disk=>405}
+ID is 00000004
+IPaddr is 192168000204
+QueueName : Server1
+[x]Sent {"queueName":"Server1","type":"create","user":"0000","hostname":"testhost","cpu":"1","memory":"512","disk":"15","publickey":"abcdefg","kvmID":1,"uuid":"a8feb5a7-a4db-4983-b413-192168000204","ipaddr":"192.168.000.204","macaddr":"00:21:68:00:02:04","status":"creating"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"create", "user":"", "hostname":"", "cpu":"", "memory":"", "disk":"", "publickey":""}
+385
+405
+386
+{:hostname=>"Server3", :disk=>405}
+ID is 00000004
+IPaddr is 192168000204
+QueueName : Server3
+[x]Sent {"queueName":"Server3","type":"create","user":"","hostname":"","cpu":"","memory":"","disk":"","publickey":"","kvmID":3,"uuid":"a8feb5a7-a4db-4983-b413-192168000204","ipaddr":"192.168.000.204","macaddr":"00:21:68:00:02:04","status":"creating"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"create", "user":"00000001", "hostname":"sinatra2-2", "cpu":"1", "memory":"512", "disk":"15", "publickey":"1213231"}
+385
+385
+386
+{:hostname=>"Server4", :disk=>386}
+ID is 00000004
+IPaddr is 192168000204
+QueueName : Server4
+[x]Sent {"queueName":"Server4","type":"create","user":"00000001","hostname":"sinatra2-2","cpu":"1","memory":"512","disk":"15","publickey":"1213231","kvmID":4,"uuid":"a8feb5a7-a4db-4983-b413-192168000204","ipaddr":"192.168.000.204","macaddr":"00:21:68:00:02:04","status":"creating"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"create", "user":"00000001", "hostname":"te", "cpu":"1", "memory":"512", "disk":"15", "publickey":"te"}
+385
+385
+366
+{:hostname=>"Server1", :disk=>385}
+ID is 00000006
+IPaddr is 192168000206
+QueueName : Server1
+[x]Sent {"queueName":"Server1","type":"create","user":"00000001","hostname":"te","cpu":"1","memory":"512","disk":"15","publickey":"te","kvmID":1,"uuid":"a8feb5a7-a4db-4983-b413-192168000206","ipaddr":"192.168.000.206","macaddr":"00:21:68:00:02:06","status":"creating"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"create", "user":"00000001", "hostname":"", "cpu":"1", "memory":"512", "disk":"15", "publickey":""}
+385
+385
+366
+{:hostname=>"Server1", :disk=>385}
+ID is 00000007
+IPaddr is 192168000207
+QueueName : Server1
+[x]Sent {"queueName":"Server1","type":"create","user":"00000001","hostname":"","cpu":"1","memory":"512","disk":"15","publickey":"","kvmID":1,"uuid":"a8feb5a7-a4db-4983-b413-192168000207","ipaddr":"192.168.000.207","macaddr":"00:21:68:00:02:07","status":"creating"}
+[*] Waiting for messages. To exit press CTRL+C
+***** Received a Message *****
+[x]Received {"queueName":"WebAPI_to_DCM", "type":"create", "user":"00000001", "hostname":"", "cpu":"1", "memory":"512", "disk":"15", "publickey":""}

@@ -45,7 +45,7 @@ class MessageAPI < Grape::API
     json = JSON.parse(request.body.read)
 
     # queueNameがなければWebAPI_to_DCMを挿入
-    queueName = json['queueName'].empty? ? 'WebAPI_to_DCM' : json['queueName']
+    queueName = json['queueName'].empty? ? "WebAPI_to_DCM" : json['queueName']
     type = json['type']
     user = json['user']
     hostname = json['hostname']
@@ -60,7 +60,7 @@ class MessageAPI < Grape::API
       sender.mqAddress = 'localhost'
       sender.queueName = 'WebAPI_to_DCM'
       # sender.msg = %Q[{"type":"#{type}", "user":"#{user}"}]
-      sender.msg = %Q[{"queueName":#{queueName}, "type":#{type}, "user":"#{user}", "hostname":"#{hostname}", "cpu":"#{cpu}", "memory":"#{memory}", "disk":"#{disk}", "publickey":"#{publickey}"}]
+      sender.msg = %Q[{"queueName":"#{queueName}", "type":"#{type}", "user":"#{user}", "hostname":"#{hostname}", "cpu":"#{cpu}", "memory":"#{memory}", "disk":"#{disk}", "publickey":"#{publickey}"}]
 
       puts "メッセージ送信処理実行 >> #{sender.msg}"
       sender.send()

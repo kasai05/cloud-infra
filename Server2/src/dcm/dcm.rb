@@ -44,7 +44,7 @@ begin
 
 	# キューメッセージの待ち受け開始
 	q.subscribe(:block => true) do |delivery_info, properties, body|
-		puts "*****データを受信*****"
+		puts "***** Received a Message *****"
 		puts "[x]Received " + body
 		hash = JSON.parse(body)  # 受信したJSON形式のメッセージをhash形式に変換
 
@@ -131,7 +131,7 @@ begin
 			targetKVM = "Server" + dm.getKVMID(hash["uuid"]).to_s
 
 			# KVMIDが0の場合かつデータタイプが「delete」の場合はデータベースから削除する
-			if targetKVM == 0 and hash["type"] == "delete"
+			if targetKVM == "Server0" and hash["type"] == "delete"
 				dm.delete(hash["uuid"])
 				next
 			elsif targetKVM == 0
@@ -153,4 +153,3 @@ rescue Interrupt => _
 	conn.close
 	exit(0)
 end
-

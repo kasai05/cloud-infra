@@ -1,0 +1,40 @@
+<h2>仮想マシン一覧</h2>
+<form action="/createinstance/<%=@userid%>" method="get"><input type="submit" value="新規作成"></form>
+<form action="/" method="get"><input type="submit" value="ユーザ一覧に戻る"></form>
+<form action="/<%=@userid%>" method="get"><input type="submit" value="情報を更新する"></form>
+
+<b><i><%= @refresh %></b></i>
+<table class="tb">
+<tbody>
+<tr class="at">
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th>ステータス</th>
+  <th>ホスト名</th>
+  <th>ポート番号</th>
+  <th>CPU数</th>
+  <th>メモリサイズ(MB)</th>
+  <th>ディスク容量(GB)</th>
+</tr>
+<%
+@vms.each do |vm|
+%>
+<tr>
+<td><form action="/start/<%= vm[:InstanceUUID] %>" method="post"><input type="submit" value="起動"></form></td>
+<td><form action="/stop/<%= vm[:InstanceUUID] %>" method="post"><input type="submit" value="停止"></form></td>
+<td><form action="/destroy/<%= vm[:InstanceUUID] %>" method="post"><input type="submit" value="強制停止"></form></td>
+<td><form action="/delete/<%= vm[:InstanceUUID] %>" method="post"><input type="submit" value="削除"></form></td>
+<td><%= vm[:Status] %></td>
+<td><%= vm[:HostName] %></td>
+<td><%= vm[:ExternalPort] %></td>
+<td><%= vm[:CPU] %></td>
+<td><%= vm[:Memory] %></td>
+<td><%= vm[:Disk] %></td>
+</tr>
+<%
+end 
+%>
+</tbody>
+</table>

@@ -2,6 +2,9 @@ require 'sinatra'
 require 'mysql'
 require './QueueSender.rb'
 require './DataBase.rb'
+require './helper.rb'
+require 'net/http'
+require 'json'
 
 USERNAME = "root"
 PASSWORD = "group1"
@@ -10,9 +13,9 @@ MQADDRESS = '127.0.0.1'
 
 set :environment, :production
 
-
 # ホーム画面。
 get '/' do
+  protect!
   @users = Array.new()
   client =  Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
   client.query("SELECT DISTINCT UserName, UserID FROM User").each do |userName, userID|
@@ -73,18 +76,16 @@ end
 
 # インスタンスの新規作成
 post '/createinstance/:userID' do |userid|
-  qs = QueueSender.new()
-  qs.mqAddress = MQADDRESS
-  qs.queueName = "WebAPI_to_DCM"
   @userid = userid
   @hostname = params[:hostname]
   @cpu = params[:cpu]
   @memory = params[:memory]
   @disk = params[:disk]
   @publickey = params[:publickey]
-  qs.msg = %Q[{"queueName":"WebAPI_to_DCM", "type":"create", "user":"#{@userid}", "hostname":"#{@hostname}", "cpu":"#{@cpu}", "memory":"#{@memory}", "disk":"#{@disk}", "publickey":"#{@publickey}"}]
-  qs.send()
-  
+
+  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "create", :user => @userid, :hostname => @hostname, :cpu => @cpu, :memory => @memory, :disk => @disk, :publickey => @publickey)
+  PUSH_WEBAPI!
+
   @refresh = "true"
   erb :createinstance
 end
@@ -92,23 +93,11 @@ end
 
 # インスタンスの起動
 post '/start/:uuid' do |uuid|
-  qs = QueueSender.new()
-  qs.mqAddress = MQADDRESS
-  qs.queueName = "WebAPI_to_DCM"
-  qs.msg = %Q[{"queueName":"WebAPI_to_DCM", "type":"start", "uuid":"#{uuid}"}]
-  qs.send()
+  @uuid = uuid
+  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "start", :uuid => @uuid)
+  PUSH_WEBAPI!
 
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT UserID FROM VirtualMachine WHERE InstanceUUID = \"#{uuid}\"").each do |userid|
-    @userid = userid[0]
-  end
-
-  @vms = Array.new()
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT HostName, InstanceUUID, ExternalPort, CPU, Memory, Disk, Status FROM VirtualMachine WHERE UserID = #{@userid}").each do |hostname, uuid, externalPort, cpu, memory, disk, status|
-    @vm = {:HostName => hostname, :InstanceUUID => uuid, :ExternalPort => externalPort, :CPU => cpu, :Memory => memory, :Disk => disk, :Status => status}
-    @vms.push(@vm)
-  end
+  GET_LIST!
 
   @refresh = "インスタンスを起動しました"
   erb :list
@@ -116,23 +105,11 @@ end
 
 # インスタンスの停止
 post '/stop/:uuid' do |uuid|
-  qs = QueueSender.new()
-  qs.mqAddress = MQADDRESS
-  qs.queueName = "WebAPI_to_DCM"
-  qs.msg = %Q[{"queueName":"WebAPI_to_DCM", "type":"stop", "uuid":"#{uuid}"}]
-  qs.send()
+  @uuid = uuid
+  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "start", :uuid => @uuid)
+  PUSH_WEBAPI!
 
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT UserID FROM VirtualMachine WHERE InstanceUUID = \"#{uuid}\"").each do |userid|
-    @userid = userid[0]
-  end
-
-  @vms = Array.new()
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT HostName, InstanceUUID, ExternalPort, CPU, Memory, Disk, Status FROM VirtualMachine WHERE UserID = #{@userid}").each do |hostname, uuid, externalPort, cpu, memory, disk, status|
-    @vm = {:HostName => hostname, :InstanceUUID => uuid, :ExternalPort => externalPort, :CPU => cpu, :Memory => memory, :Disk => disk, :Status => status}
-    @vms.push(@vm)
-  end
+  GET_LIST!
 
   @refresh = "インスタンスを停止しました"
   erb :list
@@ -140,23 +117,11 @@ end
 
 # インスタンスの強制停止
 post '/destroy/:uuid' do |uuid|
-  qs = QueueSender.new()
-  qs.mqAddress = MQADDRESS
-  qs.queueName = "WebAPI_to_DCM"
-  qs.msg = %Q[{"queueName":"WebAPI_to_DCM", "type":"destroy", "uuid":"#{uuid}"}]
-  qs.send()
+  @uuid = uuid
+  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "start", :uuid => @uuid)
+  PUSH_WEBAPI!
 
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT UserID FROM VirtualMachine WHERE InstanceUUID = \"#{uuid}\"").each do |userid|
-    @userid = userid[0]
-  end
-
-  @vms = Array.new()
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT HostName, InstanceUUID, ExternalPort, CPU, Memory, Disk, Status FROM VirtualMachine WHERE UserID = #{@userid}").each do |hostname, uuid, externalPort, cpu, memory, disk, status|
-    @vm = {:HostName => hostname, :InstanceUUID => uuid, :ExternalPort => externalPort, :CPU => cpu, :Memory => memory, :Disk => disk, :Status => status}
-    @vms.push(@vm)
-  end
+  GET_LIST!
 
   @refresh = "インスタンスを強制停止しました"
   erb :list
@@ -164,23 +129,11 @@ end
 
 # インスタンスの削除
 post '/delete/:uuid' do |uuid|
-  qs = QueueSender.new()
-  qs.mqAddress = MQADDRESS
-  qs.queueName = "WebAPI_to_DCM"
-  qs.msg = %Q[{"queueName":"WebAPI_to_DCM", "type":"delete", "uuid":"#{uuid}"}]
-  qs.send()
+  @uuid = uuid
+  @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "start", :uuid => @uuid)
+  PUSH_WEBAPI!
 
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT UserID FROM VirtualMachine WHERE InstanceUUID = \"#{uuid}\"").each do |userid|
-    @userid = userid[0]
-  end
-
-  @vms = Array.new()
-  client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT HostName, InstanceUUID, ExternalPort, CPU, Memory, Disk, Status FROM VirtualMachine WHERE UserID = #{@userid}").each do |hostname, uuid, externalPort, cpu, memory, disk, status|
-    @vm = {:HostName => hostname, :InstanceUUID => uuid, :ExternalPort => externalPort, :CPU => cpu, :Memory => memory, :Disk => disk, :Status => status}
-    @vms.push(@vm)
-  end
+  GET_LIST!
 
   @refresh = "インスタンスを削除しました"
   erb :list

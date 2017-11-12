@@ -1,0 +1,16 @@
+<h2>ユーザの新規登録</h2>
+
+<% if @refresh == "true" %>
+<b><i> --- ユーザの作成を要求しました --- </i></b><br>
+<% end %> 
+
+<form action="/createuser" method="post">
+  ユーザ名:<input type="text" name="username" value=""><br>
+  電話番号:<input type="text" name="tel" value=""><br>
+  メルアド:<input type="text" name="email" value=""><br>
+  <input type="submit" value="作成する">
+</form>
+
+<br>
+
+<form action="/" method="get"><input type="submit" value="一覧に戻る"></form>

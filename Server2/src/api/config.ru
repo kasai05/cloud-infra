@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'grape'
 
-require_relative 'MessageAPI.rb'
+require_relative 'Base.rb'
 
 use Rack::Session::Cookie
-run Rack::Cascade.new [MessageAPI]
+run Rack::Cascade.new [API::Base]

@@ -4,6 +4,7 @@
 require "mysql"
 require './result_qreceive.rb'
 require 'json'
+require './QueueSender.rb'
 
 def dbupdate(hash)
 
@@ -19,7 +20,16 @@ def dbupdate(hash)
     @status = hash["status"]
     client = Mysql.connect(hostname, username, password, dbname)
 
-    if @status == "deleted"
+    if @status == "error_create" # KVMの容量不足の場合は他のKVMは空きがある場合があるため、キューに入れ直す。
+      queueSender = QueueSender.new()  # キューメッセージの送信を担うインスタンス
+      queueSender.mqAddress = hostname
+      queueSender.queueName = "WebAPI_to_DCM"
+      hash["queueName"] = "WebAPI_to_DCM"
+      hash["status"] = ""
+      queueSender.msg = hash.to_json
+      queueSender.send()
+
+    elsif @status == "deleted"
 
       stmt = client.prepare("UPDATE VirtualMachine SET UserID = ?, Status = ? WHERE InstanceUUID = ?")
       stmt.execute  0, "#{@status}", "#{@uuid}"

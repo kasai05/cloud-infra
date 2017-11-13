@@ -5,28 +5,40 @@
 <% end %> 
 
 
-
+<table>
 <form action="/createinstance/<%=@userid%>" method="post">
-  hostname:<input type="text" name="hostname" value=""><br>
-  cpu:<select name="cpu">
+<tr>
+  <th>hostname:</th><td><input type="text" name="hostname" value=""></td>
+</tr>
+<tr>
+  <th>cpu:</th><td><select name="cpu">
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
       <option value="4">4</option>
-      </select><br>
-  memory:<select name="memory">
+      </select></td>
+</tr>
+<tr>
+  <th>memory:</th><td><select name="memory">
       <option value="512">512MB</option>
       <option value="1024">1024MB</option>
       <option value="1536">1536MB</option>
       <option value="2048">2048MB</option>
-      </select><br>
-  disk:<select name="disk">
+      </select></td>
+</tr>
+<tr>
+  <th>disk:</th><td><select name="disk">
       <option value="15">15GB</option>
-      </select><br>
-  publickey:<textarea name="publickey" rows="1"></textarea><br>
-  <input type="submit" value="送信する">
+      </select></td>
+</tr>
+<tr>
+  <th>publickey:</th><td><textarea name="publickey" rows="1"></textarea></td>
+</tr>
+<tr>
+  <th colspan="2"><input type="submit" value="送信する"></th>
+</tr>
 </form>
-
+</table>
 <br>
 
 <form action="/<%=@userid%>" method="get"><input type="submit" value="一覧に戻る"></form>

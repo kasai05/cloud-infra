@@ -134,7 +134,7 @@ begin
 			if targetKVM == "Server0" and hash["type"] == "delete"
 				dm.delete(hash["uuid"])
 				next
-			elsif targetKVM == 0
+			elsif targetKVM == "Server0"
 				# データタイプがそれ以外の場合は反応しない
 				next
 			else

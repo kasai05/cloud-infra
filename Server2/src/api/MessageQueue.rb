@@ -12,8 +12,8 @@
 require 'json'
 require 'grape'
 
-require_relative '../dcm/QueueSender.rb'
-# require_relative '../QueueSender.rb'
+# require_relative '../dcm/QueueSender.rb'
+require_relative '../QueueSender.rb'
 require_relative 'Type.rb'
 
 module API

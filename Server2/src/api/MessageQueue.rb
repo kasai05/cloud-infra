@@ -12,8 +12,8 @@
 require 'json'
 require 'grape'
 
-# require_relative '../dcm/QueueSender.rb'
-require_relative '../QueueSender.rb'
+require_relative '../dcm/QueueSender.rb'
+# require_relative '../QueueSender.rb'
 require_relative 'Type.rb'
 
 module API
@@ -79,12 +79,12 @@ module API
     # 入力項目のバリデーション
     params do
       requires :queueName, type: String
-      requires :user, type: String
-      requires :hostname, type: String
-      requires :cpu, type: String
-      requires :memory, type: String
-      requires :disk, type: String
-      requires :publickey, type: String
+      requires :user, type: String, allow_blank: false
+      requires :hostname, type: String, allow_blank: false
+      requires :cpu, type: String, allow_blank: false
+      requires :memory, type: String, allow_blank: false
+      requires :disk, type: String, allow_blank: false
+      requires :publickey, type: String, allow_blank: false
     end
     post :create do
       api_execute(request.body.read, request.fullpath, Type::CREATE)
@@ -94,7 +94,7 @@ module API
     # qs.msg = %Q[{"queueName":"WEBAPI_to_DCM", "type":"start", "uuid":"#{target}"}]
     segment :start do
       params do
-        requires :uuid, type: String
+        requires :uuid, type: String, allow_blank: false
         requires :queueName, type: String
     end
       put do
@@ -105,7 +105,7 @@ module API
     # インスタンス停止API
     # 想定メッセージ :%Q[{"queueName":"WEBAPI_to_DCM", "type":"stop", "uuid":"#{target}"}]
     params do
-      requires :uuid, type: String
+      requires :uuid, type: String, allow_blank: false
       requires :queueName, type: String
     end
     put :stop do
@@ -115,7 +115,7 @@ module API
     # インスタンス強制削除API
     # 想定メッセージ :%Q[{"queueName":"WEBAPI_to_DCM", "type":"destroy", "uuid":"#{target}"}]
     params do
-      requires :uuid, type: String
+      requires :uuid, type: String, allow_blank: false
       requires :queueName, type: String
     end
     put :destroy do
@@ -125,7 +125,7 @@ module API
     # インスタンス削除API
     # 想定メッセージ :%Q[{"queueName":"WEBAPI_to_DCM", "type":"delete", "uuid":"#{target}"}]
     params do
-      requires :uuid, type: String
+      requires :uuid, type: String, allow_blank: false
       requires :queueName, type: String
     end
     put :delete do

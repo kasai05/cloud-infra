@@ -25,7 +25,7 @@ module VmController
 
 			puts "***** メタディスクの作成開始 *****"
 			ipaddr = IpaddrTransfer.deletePadding(hash["ipaddr"])  # 192.168.000.001のような形式だとエラーになるので192.168.0.1の形式に変換する
-			devID = MetaCreater.create(hash["uuid"], ipaddr, hash["publickey"])  # メタディスクを作成し、デバイスIDを取得する
+			devID = MetaCreater.create(hash["uuid"], ipaddr, hash["publickey"], hash["hostname"])  # メタディスクを作成し、デバイスIDを取得する
 			puts "***** メタディスクの作成完了 *****"
 
 			puts "***** XML作成開始 *****"

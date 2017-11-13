@@ -7,7 +7,7 @@
 
 
 module MetaCreater
-	def create(uuid, ipaddr, pubkey)
+	def create(uuid, ipaddr, pubkey, hostname)
 		begin
 			#ディレクトリを作成する
 			puts "prepare directory"
@@ -56,6 +56,8 @@ module MetaCreater
 			cmd = "echo 'uuid #{uuid}' > /var/kvm/meta/#{uuid}/md_mount/metadata"
 				%x[#{cmd}]
 			cmd = "echo 'ipaddr #{ipaddr}' > /var/kvm/meta/#{uuid}/md_mount/metadata"
+			%x[#{cmd}]
+			cmd = "echo 'hostname #{hostname}' > /var/kvm/meta/#{uuid}/md_mount/metadata"
 			%x[#{cmd}]
 			cmd = "echo 'pubkey #{pubkey}' >> /var/kvm/meta/#{uuid}/md_mount/metadata"
 			%x[#{cmd}]

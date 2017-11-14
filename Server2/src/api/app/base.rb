@@ -1,4 +1,5 @@
-require_relative 'MessageQueue.rb'
+require_relative 'message_queue.rb'
+require_relative 'status_check.rb'
 
 module API
   class Base < Grape::API
@@ -18,5 +19,6 @@ module API
     end
 
     mount API::MessageQueue
+    mount API::StatusCheck
   end
 end

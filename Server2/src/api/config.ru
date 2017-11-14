@@ -2,7 +2,7 @@ require 'grape'
 require 'active_record'
 require 'mysql2'
 
-require_relative 'app/Base.rb'
+require_relative 'app/base.rb'
 
 # ActiveRecordをgrapeで扱う
 ActiveRecord::Base.clear_active_connections!

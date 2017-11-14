@@ -2,19 +2,19 @@
 $(function(){
     setTimeout(function(){
         location.reload();
-    },3000);
+    },30000);
 });
 </script>
 
 <h2>仮想マシン一覧</h2>
 
 <div>
-<form action="/createinstance/00000020" method="get"><input type="submit" value="新規作成"></form>
+<form action="/createinstance/<%=@userid%>" method="get"><input type="submit" value="新規作成"></form>
 <form action="/" method="get"><input type="submit" value="ユーザ一覧に戻る"></form>
-<form action="/00000020" method="get"><input type="submit" value="情報を更新する"></form>
+<form action="/<%=@userid%>" method="get"><input type="submit" value="情報を更新する"></form>
 </div>
 
-
+<b><i><%= @refresh %></b></i>
 
 <div>
 <table class="tb">
@@ -31,18 +31,24 @@ $(function(){
   <th>メモリサイズ(MB)</th>
   <th>ディスク容量(GB)</th>
 </tr>
+<%
+@vms.each do |vm|
+%>
 <tr>
-<td class="btns"><form action="/start/a8feb5a7-a4db-4983-b413-192168000212" method="post"><input id="btn-1" type="submit" value="起動"></form></td>
-<td class="btns"><form action="/stop/a8feb5a7-a4db-4983-b413-192168000212" method="post"><input id="btn-2" type="submit" value="停止"></form></td>
-<td class="btns"><form action="/destroy/a8feb5a7-a4db-4983-b413-192168000212" method="post"><input id="btn-3" type="submit" value="強制停止"></form></td>
-<td class="btns"><form action="/delete/a8feb5a7-a4db-4983-b413-192168000212" method="post"><input id="btn-4" type="submit" value="削除"></form></td>
-<td>created</td>
-<td>hogefuga</td>
-<td>52012</td>
-<td>1</td>
-<td>512</td>
-<td>15</td>
+<td class="btns"><form action="/start/<%= vm[:InstanceUUID] %>" method="post"><input id="btn-1" type="submit" value="起動"></form></td>
+<td class="btns"><form action="/stop/<%= vm[:InstanceUUID] %>" method="post"><input id="btn-2" type="submit" value="停止"></form></td>
+<td class="btns"><form action="/destroy/<%= vm[:InstanceUUID] %>" method="post"><input id="btn-3" type="submit" value="強制停止"></form></td>
+<td class="btns"><form action="/delete/<%= vm[:InstanceUUID] %>" method="post"><input id="btn-4" type="submit" value="削除"></form></td>
+<td><%= vm[:Status] %></td>
+<td><%= vm[:HostName] %></td>
+<td><%= vm[:ExternalPort] %></td>
+<td><%= vm[:CPU] %></td>
+<td><%= vm[:Memory] %></td>
+<td><%= vm[:Disk] %></td>
 </tr>
+<%
+end
+%>
 </tbody>
 </table>
 </div>

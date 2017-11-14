@@ -34,7 +34,7 @@ module VmController
 			disksource = NEWDISKPATH + hash["uuid"]  # 新しいデータディスクのフルパスを設定
 			xml.setName(hash["uuid"])  # xmlで定義する名称をキューメッセージから取得した値(=DataBaseから持って来た値)にする
 			xml.setUuid(hash["uuid"])  # xmlで定義するuuidをキューメッセージから取得した値にする
-			xml.setVcpu(hash["vcpu"])  # 仮想cpuの数をXMLに記載
+			xml.setVcpu(hash["cpu"])  # 仮想cpuの数をXMLに記載
 			xml.setMemory(hash["memory"])  # 仮想メモリのサイズをXMLに記載
 			xml.setDiskSource(disksource)  # データディスクのフルパスをXMLに記載
 			xml.setMetaDisk(devID)  # メタディスクのデバイスIDをXMLに記載

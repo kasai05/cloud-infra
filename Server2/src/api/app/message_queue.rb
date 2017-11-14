@@ -12,9 +12,9 @@
 require 'json'
 require 'grape'
 
-# require_relative '../dcm/QueueSender.rb'
-require_relative '../QueueSender.rb'
-require_relative 'Type.rb'
+require_relative '../../dcm/QueueSender.rb'
+# require_relative '../../QueueSender.rb'
+require_relative 'type.rb'
 
 module API
   class MessageQueue < Grape::API

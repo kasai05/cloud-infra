@@ -5,6 +5,8 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'grape'
 
+gem 'grape-entity'
+
 gem 'sinatra'
 
 gem 'sinatra-formkeeper'
@@ -15,4 +17,6 @@ gem 'formkeeper-japanese'
 
 gem 'bunny'
 
-# gem 'mysql2'
+gem "activerecord", "< 5.0.0"
+
+gem 'mysql2'

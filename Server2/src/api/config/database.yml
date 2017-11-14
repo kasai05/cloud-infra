@@ -1,0 +1,17 @@
+production:
+  adapter: mysql2
+  database: IkuraCloud
+  host: 202.247.58.214
+  pool: 5
+  username: root
+  password: group1
+  encoding: utf8
+
+development:
+  adapter: mysql2
+  database: IkuraCloud
+  host: 202.247.58.214
+  pool: 5
+  username: root
+  password: group1
+  encoding: utf8

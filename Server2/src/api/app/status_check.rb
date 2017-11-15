@@ -34,7 +34,7 @@ module API
       end
       get '/:userid' do
         # st = Status.all
-        status = VirtualMachine.find(userid: params[:userid])
+        status = virtual_machines.find(userid: params[:userid])
         present st, with: API::Entity::VirtualMachine
       end
     end

@@ -36,7 +36,7 @@ module API
 
         statement = client.prepare(
           'select Status, HostName, ExternalPort, CPU, Memory, Disk
-           from virtual_machines where id = ?')
+           from virtual_machines where userid = ?')
         results = statement.execute(:userid)
         results.to_json
       end

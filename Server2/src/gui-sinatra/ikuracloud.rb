@@ -46,7 +46,7 @@ post '/createuser' do
   @username = params[:username]
   @tel = params[:tel]
   @email = params[:email]
-  @userID 
+  @userID
   userCount = 1
 
   # UserIDを決めるため、レコード数を確認する
@@ -105,7 +105,7 @@ post '/createinstance/:userID' do |userid|
   @publickey = params[:publickey]
 
   @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "create", :user => @userid, :hostname => @hostname, :cpu => @cpu, :memory => @memory, :disk => @disk, :publickey => @publickey)
-  PUSH_WEBAPI!
+  PUSH_WEBAPI!('/api/create')
 
   @refresh = "true"
   erb :createinstance
@@ -117,7 +117,7 @@ end
 post '/start/:uuid' do |uuid|
   @uuid = uuid
   @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "start", :uuid => @uuid)
-  PUSH_WEBAPI!
+  PUSH_WEBAPI!('/api/start')
 
   GET_LIST!
 
@@ -129,7 +129,7 @@ end
 post '/stop/:uuid' do |uuid|
   @uuid = uuid
   @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "stop", :uuid => @uuid)
-  PUSH_WEBAPI!
+  PUSH_WEBAPI!('/api/stop')
 
   GET_LIST!
 
@@ -141,7 +141,7 @@ end
 post '/destroy/:uuid' do |uuid|
   @uuid = uuid
   @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "destroy", :uuid => @uuid)
-  PUSH_WEBAPI!
+  PUSH_WEBAPI!('/api/destroy')
 
   GET_LIST!
 
@@ -153,7 +153,7 @@ end
 post '/delete/:uuid' do |uuid|
   @uuid = uuid
   @data_json = JSON.generate(:queueName => "WebAPI_to_DCM", :type => "delete", :uuid => @uuid)
-  PUSH_WEBAPI!
+  PUSH_WEBAPI!('/api/delete')
 
   GET_LIST!
 

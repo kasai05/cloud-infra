@@ -14,9 +14,9 @@ helpers do
     @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == [username, password]
   end
 
-  def PUSH_WEBAPI!
+  def PUSH_WEBAPI!(endpoint)
     Net::HTTP.start('localhost', 9292) {|http|
-      request = Net::HTTP::Post.new('/api/send')
+      request = Net::HTTP::Post.new(endpoint)
       request.set_content_type("application/json")
       request.body = @data_json
       response = http.request(request)

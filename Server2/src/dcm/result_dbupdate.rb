@@ -31,12 +31,12 @@ def dbupdate(hash)
 
     elsif @status == "deleted"
 
-      stmt = client.prepare("UPDATE VirtualMachine SET UserID = ?, Status = ? WHERE InstanceUUID = ?")
+      stmt = client.prepare("UPDATE virtual_machines SET UserID = ?, Status = ? WHERE InstanceUUID = ?")
       stmt.execute  0, "#{@status}", "#{@uuid}"
     
     else
 
-      stmt = client.prepare("UPDATE VirtualMachine SET Status = ? WHERE InstanceUUID = ?")
+      stmt = client.prepare("UPDATE virtual_machines SET Status = ? WHERE InstanceUUID = ?")
       stmt.execute  "#{@status}", "#{@uuid}"
 
     end 

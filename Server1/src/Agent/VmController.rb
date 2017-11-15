@@ -1,13 +1,13 @@
 # ファイル名：VmController.rb
-# 概要：VirtualMachine操作用モジュール
-# 役割：VirtualMachineを作成/起動/停止/強制停止/削除する
+# 概要：virtual_machines操作用モジュール
+# 役割：virtual_machinesを作成/起動/停止/強制停止/削除する
 # 実行方法：メインプログラムから各メソッドを直接呼び出す
 # バージョン：2.0
 # 作成者：黒木
 
 require 'json'  # json形式とhash形式を相互に変換するライブラリ
 require 'fileutils'  # ファイルコピーなどの処理を行うライブラリ
-require './ModifyXML.rb'  # VirtualMachine定義ファイル(XML)の内容を変更するクラス
+require './ModifyXML.rb'  # virtual_machines定義ファイル(XML)の内容を変更するクラス
 require './MetaCreater.rb'  # メタドライブの作成、内容書き込みを行うモジュール
 require './IpaddrTransfer.rb'  # IPアドレスの0パディングを消去するモジュール
 
@@ -18,7 +18,7 @@ module VmController
 	ORIGINALDISK = "/var/kvm/disk/original"    # オリジナルとなるデータディスク(仮想マシンのHDD)
 	NEWDISKPATH = "/var/kvm/disk/"             # 新しいデータディスクを作成するパス
 
-	# VirtualMachineを作成するメソッド
+	# virtual_machinesを作成するメソッド
 	def vmCreate(hash)
 		begin
 			puts "$$$$$ vmの作成開始 $$$$$"
@@ -61,7 +61,7 @@ module VmController
 
 	end
 
-	# VirtualMachineを起動するメソッド
+	# virtual_machinesを起動するメソッド
 	def vmStart(hash)
 		begin
 			puts "***** vmを起動します。対象uuid : #{hash["uuid"]} *****"
@@ -75,7 +75,7 @@ module VmController
 		end
 	end
 
-	# VirtualMachineを停止するメソッド
+	# virtual_machinesを停止するメソッド
 	def vmStop(hash)
 		begin
 			puts "***** vmを停止します。対象uuid : #{hash["uuid"]} *****"
@@ -89,7 +89,7 @@ module VmController
 		end
 	end
 
-	# VirtualMachineを強制停止するメソッド
+	# virtual_machinesを強制停止するメソッド
 	def vmDestroy(hash)
 		begin
 			puts "***** vmを強制停止します。対象uuid : #{hash["uuid"]} *****"
@@ -103,7 +103,7 @@ module VmController
 		end
 	end
 
-	# VirtualMachineを削除するメソッド
+	# virtual_machinesを削除するメソッド
 	def vmDelete(hash)
 		begin
 			puts "***** vmを削除します。対象uuid : #{hash["uuid"]} *****"

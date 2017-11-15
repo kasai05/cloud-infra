@@ -9,33 +9,36 @@
 require 'json'
 require 'grape'
 require 'mysql2'
-require 'grape-entity'
-
-require_relative '../model/virtual_machine.rb'
 
 module API
-  module Entity
-    class VirtualMachine < Grape::Entity
-      expose :userid
-      expose :status
-      expose :hostname
-      expose :externalport
-      expose :cpu
-      expose :memory
-      expose :disk
-    end
-  end
-
   class StatusCheck < Grape::API
+
+    SOCKET = "/var/lib/mysql/mysql.sock"
+    USERNAME = "root"
+    PASSWORD = "group1"
+    DBNAME = "IkuraCloud"
+    ENCODING = "utf8"
+
     resource :status do
       # 入力項目のバリデーション
       params do
         requires :userid, type: String, allow_blank: false
       end
+
       get '/:userid' do
-        # st = Status.all
-        status = virtual_machines.find(userid: params[:userid])
-        present st, with: API::Entity::VirtualMachine
+        client = Mysql2::Client.new(
+          :socket => SOCKET,
+          :username => USERNAME,
+          :password => PASSWORD,
+          :encoding => ENCODING,
+          :database => DBNAME
+        )
+
+        statement = client.prepare(
+          'select Status, HostName, ExternalPort, CPU, Memory, Disk
+           from virtual_machines where id = ?')
+        results = statement.execute(:userid)
+        results.to_json
       end
     end
   end

@@ -12,7 +12,7 @@ class DataBase
   def getVM
     res = ""
     client = Mysql.connect(@hostname, @username, @password, @dbname)
-    client.query("SELECT IPaddr FROM VirtualMachine").each do |ans|
+    client.query("SELECT IPaddr FROM virtual_machines").each do |ans|
       res += ans.to_s
     end
     return res

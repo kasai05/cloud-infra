@@ -1,13 +1,13 @@
 # ファイル名：agent.rb
 # 概要：KVMで動作するAgent
-# 役割：キューを使いメッセージを受信し、VirtualMachineの操作を行う
+# 役割：キューを使いメッセージを受信し、virtual_machinesの操作を行う
 # 実行方法：ruby ./agent.rb "MQサーバのIPアドレス" "待ち受けするキューの名称"
 # バージョン：2.0
 # 作成者：黒木
 
 require 'json' # hashとjson形式を相互変換できるライブラリ
 require 'bunny' # RabbitMQサーバと通信するライブラリ
-require './VmController.rb' # VirtualMachineをコントロールするモジュール
+require './VmController.rb' # virtual_machinesをコントロールするモジュール
 require './QueueSender.rb' # キュー送信用クラス
 
 # 引数が足りない場合はエラー終了をする

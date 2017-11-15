@@ -19,7 +19,7 @@ get '/' do
   protect!
   @users = Array.new()
   client =  Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT DISTINCT usersName, usersID FROM users").each do |userName, userID|
+  client.query("SELECT DISTINCT UserName, UserID FROM users").each do |userName, userID|
     @user = {:userName => userName, :userID => userID}
     @users.push(@user)
   end
@@ -51,7 +51,7 @@ post '/createuser' do
 
   # usersIDを決めるため、レコード数を確認する
   client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT usersID FROM users").each do |userid|
+  client.query("SELECT UserID FROM users").each do |userid|
     userCount += 1
   end
 
@@ -59,7 +59,7 @@ post '/createuser' do
   @userID = sprintf("%08d",userCount).to_s
 
   client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  stmt = client.prepare("INSERT INTO users (usersID, usersName, Tel, Email) VALUES (?,?,?,?)")
+  stmt = client.prepare("INSERT INTO users (UserID, UserName, Tel, Email) VALUES (?,?,?,?)")
   stmt.execute("#{@userID}", "#{@username}", "#{@tel}", "#{@email}")
 
   @refresh = "true"
@@ -73,7 +73,7 @@ get '/:userID' do |userid|
   @vms = Array.new()
   @userid = userid
   client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-  client.query("SELECT HostName, InstanceUUID, ExternalPort, CPU, Memory, Disk, Status FROM virtual_machines WHERE usersID = #{@userid}").each do |hostname, uuid, externalPort, cpu, memory, disk, status|
+  client.query("SELECT HostName, InstanceUUID, ExternalPort, CPU, Memory, Disk, Status FROM virtual_machines WHERE UserID = #{@userid}").each do |hostname, uuid, externalPort, cpu, memory, disk, status|
     @vm = {:HostName => hostname, :InstanceUUID => uuid, :ExternalPort => externalPort, :CPU => cpu, :Memory => memory, :Disk => disk, :Status => status}
     @vms.push(@vm)
   end

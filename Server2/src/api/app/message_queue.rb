@@ -97,7 +97,7 @@ module API
         requires :uuid, type: String, allow_blank: false
         requires :queueName, type: String
     end
-      put do
+      post do
         api_execute(request.body.read, request.fullpath, Type::START)
       end
     end
@@ -108,7 +108,7 @@ module API
       requires :uuid, type: String, allow_blank: false
       requires :queueName, type: String
     end
-    put :stop do
+    post :stop do
       api_execute(request.body.read, request.fullpath, Type::STOP)
     end
 
@@ -118,7 +118,7 @@ module API
       requires :uuid, type: String, allow_blank: false
       requires :queueName, type: String
     end
-    put :destroy do
+    post :destroy do
       api_execute(request.body.read, request.fullpath, Type::DESTROY)
     end
 
@@ -128,7 +128,7 @@ module API
       requires :uuid, type: String, allow_blank: false
       requires :queueName, type: String
     end
-    put :delete do
+    post :delete do
       api_execute(request.body.read, request.fullpath, Type::DElETE)
     end
   end

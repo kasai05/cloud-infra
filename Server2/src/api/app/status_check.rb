@@ -11,11 +11,11 @@ require 'grape'
 require 'mysql2'
 require 'grape-entity'
 
-require_relative '../model/status.rb'
+require_relative '../model/virtual_machine.rb'
 
 module API
   module Entity
-    class Status < Grape::Entity
+    class VirtualMachine < Grape::Entity
       expose :userid
       expose :status
       expose :hostname
@@ -34,8 +34,8 @@ module API
       end
       get '/:userid' do
         # st = Status.all
-        st = Status.find(userid: params[:userid])
-        present st, with: API::Entity::Status
+        status = Status.find(userid: params[:userid])
+        present st, with: API::Entity::VirtualMachine
       end
     end
   end

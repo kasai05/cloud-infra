@@ -30,7 +30,7 @@ class DatabaseMediater
 
 	# hash形式の情報を変数に格納する
 	def setParams(hash)
-		hash["user"].nil? ? @userID = "nousersID" : @userID = hash["user"]
+		hash["user"].nil? ? @userID = "noUserID" : @userID = hash["user"]
 		hash["kvmID"].nil? ? @kvmID = "0" : @kvmID = hash["kvmID"]
 		hash["cpu"].nil? ? @cpu = 1 : @cpu = hash["cpu"]
 		hash["memory"].nil? ? @memory = 512 : @memory = hash["memory"]
@@ -58,7 +58,7 @@ class DatabaseMediater
 		vacantIPaddr = nil
 
 		client = Mysql.connect(@mqAddress, USERNAME, PASSWORD, DBNAME)
-		client.query("SELECT id, IPaddr FROM virtual_machines WHERE usersID = 0 AND IPaddr != '' LIMIT 1").each do |col1, col2| 
+		client.query("SELECT id, IPaddr FROM virtual_machines WHERE UserID = 0 AND IPaddr != '' LIMIT 1").each do |col1, col2| 
 			vacantID = col1
 			vacantIPaddr = col2
 		end
@@ -71,7 +71,7 @@ class DatabaseMediater
 			@uuid = BASEUUID + sprintf("%012d",@@instanceCount).to_s
 			@@instanceCount += 1
 
-			stmt = client.prepare("INSERT INTO virtual_machines (usersID, KVMID, InstanceUUID, HostName, CPU, Memory, Disk, ScaleUp, MinCPU, MinMemory, MinDisk, MaxCPU, MaxMemory, MaxDisk, ScaleOutID, Status, PublicKey) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+			stmt = client.prepare("INSERT INTO virtual_machines (UserID, KVMID, InstanceUUID, HostName, CPU, Memory, Disk, ScaleUp, MinCPU, MinMemory, MinDisk, MaxCPU, MaxMemory, MaxDisk, ScaleOutID, Status, PublicKey) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 			stmt.execute("#{@userID}", "#{@kvmID}", "#{@uuid}", "#{@hostname}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}")
 
 		else  # 空きIPアドレスがある場合は、そのIPアドレスのレコードを更新する
@@ -79,7 +79,7 @@ class DatabaseMediater
 			# インスタンスid(UUID)を決める
 			@uuid = BASEUUID + vacantIPaddr.to_s
 
-			stmt = client.prepare("UPDATE virtual_machines SET usersID = ?,
+			stmt = client.prepare("UPDATE virtual_machines SET UserID = ?,
 														KVMID = ?, InstanceUUID = ?, HostName = ?, CPU = ?, Memory = ?,
 														Disk = ?, ScaleUp = ?, MinCPU = ?, MinMemory = ?, MinDisk = ?,
 														MaxCPU = ?, MaxMemory = ?, MaxDisk = ?, ScaleOutID = ?, 
@@ -96,7 +96,7 @@ class DatabaseMediater
 	# 指定されたuuidのインスタンスをデータベースから削除する。(userIDを0にする)
 	def delete(uuid)
 		client = Mysql.connect(@mqAddress, USERNAME, PASSWORD, DBNAME)
-		stmt = client.prepare("UPDATE virtual_machines SET usersID = ? WHERE InstanceUUID = ?")
+		stmt = client.prepare("UPDATE virtual_machines SET UserID = ? WHERE InstanceUUID = ?")
 		stmt.execute(0,uuid)
 	end
 
@@ -118,7 +118,7 @@ class DatabaseMediater
 		@@instanceCount += 1
 
 		client = Mysql.connect(@mqAddress, USERNAME, PASSWORD, DBNAME)
-		stmt = client.prepare("INSERT INTO virtual_machines (usersID, KVMID, InstanceUUID, HostName, CPU, Memory, Disk, ScaleUp, MinCPU, MinMemory, MinDisk, MaxCPU, MaxMemory, MaxDisk, ScaleOutID, Status, PublicKey) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+		stmt = client.prepare("INSERT INTO virtual_machines (UserID, KVMID, InstanceUUID, HostName, CPU, Memory, Disk, ScaleUp, MinCPU, MinMemory, MinDisk, MaxCPU, MaxMemory, MaxDisk, ScaleOutID, Status, PublicKey) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 		stmt.execute("#{@userID}", "#{@kvmID}", "#{@uuid}", "#{@hostname}", "#{@cpu}", "#{@memory}", "#{@disk}", "#{@scaleUp}", "#{@minCPU}", "#{@minMemory}", "#{@minDisk}", "#{@maxCPU}", "#{@maxMemory}", "#{@maxDisk}", "#{@scaleOutID}", "#{@status}", "#{@publicKey}")
 	end
 end

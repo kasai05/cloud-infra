@@ -26,13 +26,13 @@ helpers do
 
   def GET_LIST!
     client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-    client.query("SELECT usersID FROM virtual_machines WHERE InstanceUUID = \"#{@uuid}\"").each do |userid|
+    client.query("SELECT userID FROM virtual_machines WHERE InstanceUUID = \"#{@uuid}\"").each do |userid|
       @userid = userid[0]
     end
 
     @vms = Array.new()
     client = Mysql.connect(MQADDRESS, USERNAME, PASSWORD, DBNAME)
-    client.query("SELECT HostName, InstanceUUID, ExternalPort, CPU, Memory, Disk, Status FROM virtual_machines WHERE usersID = #{@userid}").each do |hostname, uuid, externalPort, cpu, memory, disk, status|
+    client.query("SELECT HostName, InstanceUUID, ExternalPort, CPU, Memory, Disk, Status FROM virtual_machines WHERE userID = #{@userid}").each do |hostname, uuid, externalPort, cpu, memory, disk, status|
       @vm = {:HostName => hostname, :InstanceUUID => uuid, :ExternalPort => externalPort, :CPU => cpu, :Memory => memory, :Disk => disk, :Status => status}
       @vms.push(@vm)
     end

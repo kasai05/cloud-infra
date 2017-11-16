@@ -30,6 +30,7 @@ module MetaCreater
 			puts "mount loopback"
 			cmd = "kpartx -av /var/kvm/meta/#{uuid}/metadata_drive | awk '{print $3}'"
 				devNo = %x[#{cmd}].chomp
+			puts devNo
 
 			#処理待ちする
 			puts "settle..."
@@ -53,11 +54,11 @@ module MetaCreater
 
 			#ファイルにデータを書き込む
 			puts "write file"
-			cmd = "echo 'uuid #{uuid}' > /var/kvm/meta/#{uuid}/md_mount/metadata"
+			cmd = "echo 'uuid #{uuid}' >> /var/kvm/meta/#{uuid}/md_mount/metadata"
 				%x[#{cmd}]
-			cmd = "echo 'ipaddr #{ipaddr}' > /var/kvm/meta/#{uuid}/md_mount/metadata"
+			cmd = "echo 'ipaddr #{ipaddr}' >> /var/kvm/meta/#{uuid}/md_mount/metadata"
 			%x[#{cmd}]
-			cmd = "echo 'hostname #{hostname}' > /var/kvm/meta/#{uuid}/md_mount/metadata"
+			cmd = "echo 'hostname #{hostname}' >> /var/kvm/meta/#{uuid}/md_mount/metadata"
 			%x[#{cmd}]
 			cmd = "echo 'pubkey #{pubkey}' >> /var/kvm/meta/#{uuid}/md_mount/metadata"
 			%x[#{cmd}]
@@ -65,6 +66,7 @@ module MetaCreater
 			#アンマウント
 			puts "umount"
 			cmd = "umount /var/kvm/meta/#{uuid}/md_mount"
+			puts cmd
 				%x[#{cmd}]
 
 			puts "done"

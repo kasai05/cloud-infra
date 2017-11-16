@@ -15,7 +15,7 @@ module VmController
 	# 定数の設定
 	ORIGINALXML = "/var/kvm/xml/original.xml"  # オリジナルとなるXMLファイル
 	NEWXMLPATH = "/var/kvm/xml/"               # 新しいXMLファイルを作成するパス
-	ORIGINALDISK = "/var/kvm/disk/original"    # オリジナルとなるデータディスク(仮想マシンのHDD)
+	ORIGINALDISK = "/var/kvm/remote/original"    # オリジナルとなるデータディスク(仮想マシンのHDD)
 	NEWDISKPATH = "/var/kvm/disk/"             # 新しいデータディスクを作成するパス
 
 	# virtual_machinesを作成するメソッド
@@ -25,6 +25,8 @@ module VmController
 
 			puts "***** メタディスクの作成開始 *****"
 			ipaddr = IpaddrTransfer.deletePadding(hash["ipaddr"])  # 192.168.000.001のような形式だとエラーになるので192.168.0.1の形式に変換する
+			puts "ipaddr : " + ipaddr.to_s
+			puts "publickey : " + hash["publickey"]
 			devID = MetaCreater.create(hash["uuid"], ipaddr, hash["publickey"], hash["hostname"])  # メタディスクを作成し、デバイスIDを取得する
 			puts "***** メタディスクの作成完了 *****"
 

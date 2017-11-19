@@ -1,3 +1,11 @@
+################################
+# "response"というキューが来たら
+# MariaDBの更新をするメソッド
+# 実際DBの更新メソッドはresult_dbupdate.rbを使う
+# By Haneda
+# バージョン2.0
+################################
+
 require "bunny"
 require "json"
 require "./result_dbupdate"

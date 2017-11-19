@@ -1,6 +1,8 @@
-###dbupdateするプログラム
+#キューからメッセージを受け取って、MariaDBを更新するプログラム
 #By haneda
-#
+#バージョン2.0
+#############################
+
 require "mysql"
 require './result_qreceive.rb'
 require 'json'

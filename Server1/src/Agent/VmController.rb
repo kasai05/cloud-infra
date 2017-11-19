@@ -2,7 +2,7 @@
 # 概要：virtual_machines操作用モジュール
 # 役割：virtual_machinesを作成/起動/停止/強制停止/削除する
 # 実行方法：メインプログラムから各メソッドを直接呼び出す
-# バージョン：2.0
+# バージョン：2.1
 # 作成者：黒木
 
 require 'json'  # json形式とhash形式を相互に変換するライブラリ
@@ -83,8 +83,8 @@ module VmController
 			puts "***** vmを停止します。対象uuid : #{hash["uuid"]} *****"
 				target = hash["uuid"]
 			value = %x[ #{"virsh shutdown " + target } ]
-			puts "***** vmを停止しました。対象uuid : #{hash["uuid"]} *****"
-			return "stopped"
+			puts "***** vmの停止を実施中。対象uuid : #{hash["uuid"]} *****"
+			return "stopping"
 		rescue => error
 			puts error
 			return "error_stop"
@@ -98,7 +98,7 @@ module VmController
 				target = hash["uuid"]
 			value = %x[ #{"virsh destroy " + target } ]
 			puts "***** vmを強制停止しました。対象uuid : #{hash["uuid"]} *****"
-			return "destroyed"
+			return "stopping"
 		rescue => error
 			puts error
 			return "error_destroy"

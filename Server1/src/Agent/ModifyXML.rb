@@ -37,6 +37,9 @@ class ModifyXML
 		element = @doc.elements['domain/memory']
 		element.text = newMemory.to_i * 1024
 		File.write(@newFile, @doc)
+		element = @doc.elements['domain/currentMemory']
+		element.text = newMemory.to_i * 1024
+		File.write(@newFile, @doc)
 	end
 
 	def setMacAddress(newMacAddress)

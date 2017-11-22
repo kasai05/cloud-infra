@@ -2,7 +2,7 @@
 # 概要：DataCenterManagerの受付係
 # 役割：主にWebAPIからのキューメッセージの待ち受けを行い、各種動作を実施する。
 # 実行方法：ruby ./agent.rb "MQサーバのIPアドレス" ("待ち受けするキューの名称")
-# バージョン：2.1
+# バージョン：2.2
 # 作成者：黒木
 
 
@@ -128,13 +128,13 @@ begin
 		when "start", "stop", "destroy", "delete"  # データタイプが作成、停止、強制停止、削除の場合...
 
 			# UUIDから対象の仮想マシンが格納されているKVMIDを確認する
-			targetKVM = "Server" + dm.getKVMID(hash["uuid"]).to_s
+			targetKVM = "Server" + dm.getKVMID(hash["uuid"]).to_s + "_operation"
 
 			# KVMIDが0の場合かつデータタイプが「delete」の場合はデータベースから削除する
-			if targetKVM == "Server0" and hash["type"] == "delete"
+			if targetKVM == "Server0_operation" and hash["type"] == "delete"
 				dm.delete(hash["uuid"])
 				next
-			elsif targetKVM == "Server0"
+			elsif targetKVM == "Server0_operation"
 				# データタイプがそれ以外の場合は反応しない
 				next
 			else
